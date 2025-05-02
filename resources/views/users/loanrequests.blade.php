@@ -28,7 +28,7 @@
          <td class="">{{$loan -> loan_id}}</td>
          <td>
             <div style="display:flex; gap:20px; ">
-                <button style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" id="update">Update</button>
+                <button style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" id="request">Update</button>
                 <button style="background-color:red; color:white; padding:10px; width: 100px; border-radius: 15px;" id="delete">Delete</button>
 
             </div>

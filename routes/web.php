@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\LoanRequestController;
+use App\Http\Controllers\LoansController;
+use App\Http\Controllers\TransactionsController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -23,5 +25,6 @@ Route::middleware('auth')->group(function () {
 //View for users
 Route::get('/users',[AccountsController::class,'index']) -> name("users");
 Route::get('/loanrequests',[LoanRequestController::class,'index']) -> name('loanrequests');
-
+Route::get('/loans',[LoansController::class,'index']) -> name('loans');
+Route::get('/transactions',[TransactionsController::class,'index']) -> name('transactions');
 require __DIR__.'/auth.php';
