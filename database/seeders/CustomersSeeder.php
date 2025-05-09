@@ -5,8 +5,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 
-
-
 class CustomersSeeder extends Seeder
 {
     /**
@@ -17,7 +15,7 @@ class CustomersSeeder extends Seeder
         $faker = Faker::create();
         for($i = 0; $i <= 1000; $i++){
             DB::table('customer') -> insert([
-                'first_name' => $faker ->firstName(),
+                'first_name' => $faker -> firstName(),
                 'last_name' => $faker -> lastName(),
                 'date_of_birth' => $faker -> dateTime(),
                 'email' => $faker -> email(),

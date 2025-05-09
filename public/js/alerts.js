@@ -20,9 +20,9 @@ destroy.addEventListener("click", () => {
         }
     });
 });
+
 if (pathname.split("/").includes("loanrequests")) {
     const updateRequest = document.getElementById("request");
-
     updateRequest.addEventListener("click", () => {
         Swal.fire({
             title: "Wanna update request?",

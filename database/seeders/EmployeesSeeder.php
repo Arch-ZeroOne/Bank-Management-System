@@ -25,7 +25,7 @@ class EmployeesSeeder extends Seeder
                 'email' => $faker -> email(),
                 'phone_number' => $faker -> phoneNumber(),
                 'position' => $positions[$rand_position],
-                'hire_date' => $faker -> dateTime(),
+                'hire_date' => $faker -> date(),
                 'branch_id' =>  $faker -> randomNumber(5,false),
             ]);
 

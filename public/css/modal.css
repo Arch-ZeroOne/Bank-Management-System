@@ -1,0 +1,4 @@
+#modal {
+    top: -800px;
+    transition: "position 20s at ease";
+}

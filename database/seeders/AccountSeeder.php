@@ -17,11 +17,12 @@ class AccountSeeder extends Seeder
        $faker = Faker::create();
        $accountTypes = ['Savings','Checking','Basic'];
        $status = [1,0];
-   for($i = 0; $i <= 1000; $i++){
-     $random = rand(0,2);
-     $random2 = rand(0,1);
 
-       DB::table('accounts') -> insert([
+         for($i = 0; $i <= 1000; $i++){
+         $random = rand(0,2);
+         $random2 = rand(0,1);
+
+         DB::table('accounts') -> insert([
         'account_number' => $faker -> randomNumber(9,true),
         'account_type' => $accountTypes[$random],
         'balance' => $faker -> randomNumber(8,false),

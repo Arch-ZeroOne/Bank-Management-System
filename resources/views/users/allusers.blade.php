@@ -1,11 +1,17 @@
 <x-app-layout>
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('All Users') }}
         </h2>
     </x-slot>
-    <div class="bg-green-600">Add New</div>
-    <div class="flex justify-center w-full mt-5 ">
+
+    <div class="flex justify-center w-full mt-5 flex-col items-center">
+
+
+
+    <x-addbtn/>
+
     <table class="" id="myTable" class="display text-white">
         <thead>
         <tr class="">
@@ -24,14 +30,14 @@
      @foreach ($users as $user )
     
      <tr>
-     <td class="">{{$user -> account_id}}</td>
-     <td class="" >{{$user -> account_number}}</td>
-     <td class="">{{$user -> account_type }}</td>
-     <td class="">{{$user -> balance}}</td>
-     <td class="">{{$user -> opened_date}}</td>
-     <td class="">{{$user -> status}}</td>
-     <td class="">{{$user -> customer_id}}</td>
-     <td>
+        <td class="">{{$user -> account_id}}</td>
+        <td class="" >{{$user -> account_number}}</td>
+        <td class="">{{$user -> account_type }}</td>
+        <td class="">{{$user -> balance}}</td>
+        <td class="">{{$user -> opened_date}}</td>
+        <td class="">{{$user -> status}}</td>
+        <td class="">{{$user -> customer_id}}</td>
+       <td>
         <div style="display:flex; gap:20px; ">
             <button style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" id="update">Update</button>
             <button style="background-color:red; color:white; padding:10px; width: 100px; border-radius: 15px;" id="delete">Delete</button>
@@ -39,10 +45,34 @@
         </div>
      </td>
      </tr>
-   
 
      @endforeach
     </tbody>
     </table>
-</div>
+        </div>
+        <script  src="https://cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
+        <script  src="js/alerts.js" ></script>
+
+        @if($errors -> any())
+        {{$errors}}
+        <script>
+            Swal.fire({
+                title : "Error occured!",
+                text : 'Please try again',
+                icon : 'error',
+            });
+        </script>
+        @endif
+           
+       @if(session('message'))
+        <script>
+            Swal.fire({
+                title : "Succesfull!",
+                text :  "User has been successfully added",
+                icon : 'success',
+            });
+        </script>
+        @endif
+    
+        
 </x-app-layout>

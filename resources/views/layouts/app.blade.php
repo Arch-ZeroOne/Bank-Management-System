@@ -6,7 +6,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -14,10 +13,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.min.css">
+        <link rel="stylesheet" href="./css/modal.css">
+       
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="">
+          
+      
         <div class="min-h-screen " >
             @include('layouts.navigation')
 
@@ -29,11 +32,15 @@
                     </div>
                 </header>
             @endisset
-
+    
             <!-- Page Content -->
+            
             <main class="">
+                
                 {{ $slot }}
             </main>
+
+            <x-accformmodal/>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.datatables.net/2.3.0/js/dataTables.min.js"></script>
@@ -42,7 +49,9 @@
             $('#myTable').DataTable();
         }); 
         </script>
-        <script  src="https://cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
-        <script  src="js/alerts.js" ></script>
+        <script src="js/modals.js"></script>
+   
+  
+        
     </body>
 </html>
