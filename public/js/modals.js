@@ -7,9 +7,7 @@ const addUser = document.getElementById("add-user");
 modal_trigger.addEventListener("click", () => {
     modal.style.top = "0px";
 });
-addUser.addEventListener("click", () => {
-    modal.style.top = "-900px";
-});
+
 close.addEventListener("click", () => {
     modal.style.top = "-900px";
 });

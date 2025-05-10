@@ -1,6 +1,6 @@
 const destroy = document.getElementById("delete");
 const pathname = window.location.href;
-
+const addBtn = document.getElementById("add-user");
 destroy.addEventListener("click", () => {
     Swal.fire({
         title: "Are you sure?",
@@ -49,3 +49,19 @@ if (pathname.split("/").includes("loanrequests")) {
         }).then((result) => {});
     });
 }
+
+addBtn.addEventListener("click", () => {
+    Swal.fire({
+        title: "Confirm form submission?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Add User",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById("add-modal").submit();
+        }
+    });
+});

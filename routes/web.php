@@ -35,11 +35,6 @@ Route::post('/users/store',[AccountsController::class,'store']) -> name('users.s
 
 
 
-
-
-
-
-
 //View for users
 Route::get('/loanrequests',[LoanRequestController::class,'index']) -> name('loanrequests');
 Route::get('/loans',[LoansController::class,'index']) -> name('loans');
