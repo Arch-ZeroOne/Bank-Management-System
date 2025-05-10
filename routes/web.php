@@ -24,18 +24,23 @@ Route::middleware('auth')->group(function () {
 
 Route::controller(AccountsController::class) -> name("user") -> prefix("user") -> group(function(){
     Route::get('/','index'); 
-    Route::delete("/{account}",'destroy') -> name(".destroy");
-  
-});
+    Route::delete("/{id}",'destroy') -> name(".destroy");
+    Route::patch("/{id}", "update") -> name(".update");
+  });
 
+
+  //*Needs to be transfered
 Route::post('/users/store',[AccountsController::class,'store']) -> name('users.store');
 
 
 
 
 
-//View for users
 
+
+
+
+//View for users
 Route::get('/loanrequests',[LoanRequestController::class,'index']) -> name('loanrequests');
 Route::get('/loans',[LoansController::class,'index']) -> name('loans');
 Route::get('/transactions',[TransactionsController::class,'index']) -> name('transactions');

@@ -1,7 +1,7 @@
 <x-app-layout>
 
 <div>
-    {{dd($forminfo)}}
+    {{dd($id)}}
 </div>
 
 </x-app-layout>

@@ -19,6 +19,17 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="">
+
+        @if ($errors -> get('customer_id'))
+             
+       
+    <script>
+            let error = @json($errors);
+            console.log(error);
+            </script>
+        @endif
+
+     
           
       
         <div class="min-h-screen " >
@@ -40,7 +51,8 @@
                 {{ $slot }}
             </main>
 
-            <x-accformmodal/>
+            <x-accounts.accformmodal/>
+            <x-accounts.updateaccmodal/>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.datatables.net/2.3.0/js/dataTables.min.js"></script>
@@ -50,6 +62,8 @@
         }); 
         </script>
         <script src="js/modals.js"></script>
+        <script  src="https://cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
+        <script  src="js/alerts.js" ></script>
    
   
         

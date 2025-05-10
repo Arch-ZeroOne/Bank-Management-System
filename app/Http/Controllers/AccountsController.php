@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Http\Requests\AddUserRequest;
+use App\Http\Requests\AddUserRequest;;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 class AccountsController extends Controller
@@ -35,12 +35,10 @@ class AccountsController extends Controller
         
 
     }
-    public function delete($account){
-        $account -> delete();
+    public function destroy(String $id){
+        DB::table('accounts') -> where("account_id",$id) -> delete();
 
-
-    return redirect() -> route("products")
-                      -> with("message", "User has been succesfully deleted");
+        return redirect() -> route("user");
 
     }
 }

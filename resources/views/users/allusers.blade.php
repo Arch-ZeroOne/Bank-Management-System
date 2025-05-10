@@ -11,6 +11,7 @@
 
 
     <x-addbtn/>
+  
 
     <table class="" id="myTable" class="display text-white">
         <thead>
@@ -39,8 +40,15 @@
         <td class="">{{$user -> customer_id}}</td>
        <td>
         <div style="display:flex; gap:20px; ">
-            <button style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" id="update">Update</button>
+            <button  style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" id="update">Update</button>
+
+
+       
             <button style="background-color:red; color:white; padding:10px; width: 100px; border-radius: 15px;" id="delete">Delete</button>
+                 <form id="delete-account" method="POST" action="{{route("user.destroy", $user -> account_id)}}">
+                @csrf
+                @method("DELETE")
+            </form>
 
         </div>
      </td>
@@ -50,29 +58,7 @@
     </tbody>
     </table>
         </div>
-        <script  src="https://cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
-        <script  src="js/alerts.js" ></script>
+        
 
-        @if($errors -> any())
-        {{$errors}}
-        <script>
-            Swal.fire({
-                title : "Error occured!",
-                text : 'Please try again',
-                icon : 'error',
-            });
-        </script>
-        @endif
-           
-       @if(session('message'))
-        <script>
-            Swal.fire({
-                title : "Succesfull!",
-                text :  "User has been successfully added",
-                icon : 'success',
-            });
-        </script>
-        @endif
-    
         
 </x-app-layout>

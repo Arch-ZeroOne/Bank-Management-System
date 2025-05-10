@@ -9,9 +9,10 @@ destroy.addEventListener("click", () => {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonText: "Delete User",
     }).then((result) => {
         if (result.isConfirmed) {
+            document.getElementById("delete-account").submit();
             Swal.fire({
                 title: "Deleted!",
                 text: "Your file has been deleted.",
