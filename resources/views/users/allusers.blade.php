@@ -26,6 +26,9 @@
     <tbody>
 
     @foreach ($users as $user )
+
+
+    
     
     <tr>
         <td class="">{{$user -> account_id}}</td>
@@ -37,28 +40,38 @@
         <td class="">{{$user -> customer_id}}</td>
     <td>
         <div style="display:flex; gap:20px; ">
-            <form method="POST" action="{{route("user.update", $user -> account_id)}}" class="update-account">
+            <form method="POST" action="{{route("user.update", $user -> account_id)}}" class="update-account" >
                 @method("PATCH")
                 @csrf
-           <button  style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" id="update-btn">Update</button>
-            </form>
+               
+                        
+        <button  style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" class="edit-btn" id="{{$user -> account_id}}">Update</button>
+
             <!--Form needs to sorroundn the button so laravel deletes it accurately -->
                 <form class="delete-account" method="POST" action="{{route("user.destroy", $user -> account_id)}}">
                 @csrf
                 @method("DELETE")
-               <button style="background-color:red; color:white; padding:10px; width: 100px; border-radius: 15px;" class="delete">Delete</button>
+              <button style="background-color:red; color:white; padding:10px; width: 100px; border-radius: 15px;" class="delete">Delete</button>
             </form>
-         
 
         </div>
     </td>
     </tr>
+    
 
+    
     @endforeach
+
+
+
           
     </tbody>
     </table>
+
+
     </div>
+
+
 
       
         

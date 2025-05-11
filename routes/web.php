@@ -26,6 +26,7 @@ Route::controller(AccountsController::class) -> name("user") -> prefix("user") -
     Route::get('/','index'); 
     Route::delete("/{id}",'destroy') -> name(".destroy");
     Route::patch("/{id}", "update") -> name(".update");
+    Route::get("/{id}", "getInfo") -> name(".getInfo");
   });
 
 

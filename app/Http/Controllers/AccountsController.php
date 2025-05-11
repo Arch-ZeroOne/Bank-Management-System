@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddUserRequest;;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use App\Http\Requests\UpdateUserRequest;
 class AccountsController extends Controller
 {
     
@@ -32,9 +33,21 @@ class AccountsController extends Controller
             return redirect()   -> route("user") 
                                 -> with("message", "User added Successfully");
     }
+
+    public function getInfo(String $id){
+        $data =  DB::table("accounts") -> where("account_id", $id) -> get();
+       
+        return response() -> json($data);
+
+    }
     
-    public function update(){
-        
+    public function update(UpdateUserRequest $request , $id){
+        $form_infos = $request -> validated();
+
+        DB::update("UPDATE accounts SET account_number = ? , account_type = ? , balance = ? , customer_id = ?, opened_date = ? , status = ?",
+    [$form_infos["acc-id"],$form_infos["acc-number"],$form_infos['acc-plans'],$form_infos['initial-balance'],$form_infos['opened-date'],$form_infos['status'], $form_infos["customer_id"]] );
+
+    return redirect() -> route("users") -> with("message", "User successfully updated");
 
     }
     public function destroy(String $id){

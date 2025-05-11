@@ -104,21 +104,19 @@
 
 
     <script>
-      //Delete Confirmation
+      // Confirmation Modals
         document.addEventListener('DOMContentLoaded', () => {
         const deleteFormInstance  = document.querySelectorAll(".delete-account");
         const updateFormInstance =   document.querySelectorAll('.update-account');
         const updateModal = document.getElementById("update");
         const update_btn = document.getElementById("update-btn");
-      
-       
-
-
+        const exit_btn = document.querySelectorAll("#quit")
+    
         deleteFormInstance.forEach((form) => {
-              form.addEventListener("submit", (e) => {
-              e.preventDefault();
+            form.addEventListener("submit", (e) => {
+            e.preventDefault();
 
-               Swal.fire({
+            Swal.fire({
                     title: "Wanna delete account?",
                     text: "You won't be able to revert this!",
                     icon: "warning",
@@ -128,27 +126,43 @@
                     confirmButtonText: "Confirm",
 
                 }).then((result) => {
-                       if(result.isConfirmed){
-                          form.submit();
+                    if(result.isConfirmed){
+                        form.submit();
                 }
             });
         });
     });    
- 
 
-  
+
     updateFormInstance.forEach((form) => {
-          form.addEventListener("submit", (e) => {
+           console.log("loaded");
+            form.addEventListener("submit", (e) => {
             e.preventDefault();
-         
             updateModal.style.top = "0px";
-          });
-      });
+        });
+    });
 
-      
         })
-
-
+  </script>
+  <!-- We acquired the id by embedding the id to the id property of the button -->
+  <!-- Ajax operation for getting form datas -->
+        <script>
+            document.querySelectorAll(".edit-btn").forEach((btn) => {
+                btn.addEventListener("click", (e) => {
+                let id = e.target.id;
+                fetch(`user/${id}`).then((response) => {
+                    return response.json();
+                    
+                }).then((data) => {
+                    document.getElementById("acc-id").value = data[0].account_id;
+                    document.getElementById("acc-number").value = data[0].account_number;
+                    document.getElementById("initial-balance").value = data[0].balance;
+                    document.getElementById("opened-date").value = data[0].opened_date;
+                    document.getElementById("customer_id").value = data[0].customer_id;
+                })
+                });
+            });
+         
         </script>
 
         

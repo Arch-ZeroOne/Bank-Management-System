@@ -1,4 +1,4 @@
-<div class="flex self-end fixed" class="quit">
+<div class="flex self-end fixed" class="quit" id="quit">
     <button
       class="relative border-2 border-black group hover:border-green-500 w-12 h-12 duration-500 overflow-hidden cursor-pointer"
       type="button"
