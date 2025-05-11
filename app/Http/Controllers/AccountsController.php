@@ -42,5 +42,6 @@ class AccountsController extends Controller
 
         return redirect() -> route("user");
 
+
     }
 }

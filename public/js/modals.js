@@ -1,13 +1,15 @@
-const modal = document.getElementById("modal");
-const modal_trigger = document.getElementById("add-new");
-const table = document.getElementById("myTable");
-const close = document.getElementById("quit");
-const addUser = document.getElementById("add-user");
-
-modal_trigger.addEventListener("click", () => {
-    modal.style.top = "0px";
+const addNewModal = document.getElementById("modal");
+const trigger_btn = document.getElementById("add-new");
+const close_btn = document.querySelectorAll(".quit");
+const updateModal = document.getElementById("update");
+console.log(close_btn);
+trigger_btn.addEventListener("click", () => {
+    addNewModal.style.top = "0px";
 });
-
-close.addEventListener("click", () => {
-    modal.style.top = "-900px";
+close_btn.forEach((btn) => {
+    
+    btn.addEventListener("click", () => {
+        addNewModal.style.top = "-900px";
+        updateModal.style.top = "-900px";
+    });
 });

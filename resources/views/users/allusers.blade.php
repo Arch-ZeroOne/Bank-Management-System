@@ -7,11 +7,7 @@
     </x-slot>
 
     <div class="flex justify-center w-full mt-5 flex-col items-center">
-
-
-
     <x-addbtn/>
-  
 
     <table class="" id="myTable" class="display text-white">
         <thead>
@@ -28,36 +24,43 @@
     </thead>
 
     <tbody>
-     @foreach ($users as $user )
+
+    @foreach ($users as $user )
     
-     <tr>
+    <tr>
         <td class="">{{$user -> account_id}}</td>
-        <td class="" >{{$user -> account_number}}</td>
+        <td class="">{{$user -> account_number}}</td>
         <td class="">{{$user -> account_type }}</td>
         <td class="">{{$user -> balance}}</td>
         <td class="">{{$user -> opened_date}}</td>
         <td class="">{{$user -> status}}</td>
         <td class="">{{$user -> customer_id}}</td>
-       <td>
+    <td>
         <div style="display:flex; gap:20px; ">
-            <button  style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" id="update">Update</button>
-
-
-       
-            <button style="background-color:red; color:white; padding:10px; width: 100px; border-radius: 15px;" id="delete">Delete</button>
-                 <form id="delete-account" method="POST" action="{{route("user.destroy", $user -> account_id)}}">
+            <form method="POST" action="{{route("user.update", $user -> account_id)}}" class="update-account">
+                @method("PATCH")
+                @csrf
+           <button  style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" id="update-btn">Update</button>
+            </form>
+            <!--Form needs to sorroundn the button so laravel deletes it accurately -->
+                <form class="delete-account" method="POST" action="{{route("user.destroy", $user -> account_id)}}">
                 @csrf
                 @method("DELETE")
+               <button style="background-color:red; color:white; padding:10px; width: 100px; border-radius: 15px;" class="delete">Delete</button>
             </form>
+         
 
         </div>
-     </td>
-     </tr>
+    </td>
+    </tr>
 
-     @endforeach
+    @endforeach
+          
     </tbody>
     </table>
-        </div>
+    </div>
+
+      
         
 
         
