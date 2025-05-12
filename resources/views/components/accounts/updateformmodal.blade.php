@@ -9,18 +9,18 @@
         <div  class="grid grid-cols-2 items-center w-full gap-3 p-2   " id="add-modal"> 
     
         <div class="flex flex-col items-center">
-        <label for="acc-id" class="font-bold text-lg">Account ID:</label>
-        <input type="text" class="w-[80%]  text-black  border-black rounded-md p-3" id="acc-id" name="acc-id">
+        <label for="id" class="font-bold text-lg">Account ID:</label>
+        <input type="text" class="w-[80%]  text-black  border-black rounded-md p-3" id="id" name="id">
         </div>
 
         <div class="flex flex-col items-center">
-        <label for="acc-number" class="font-bold text-lg">Account Number:</label>
-        <input type="number" class="w-[80%]  text-black  border-black rounded-md p-3" id="acc-number" name="acc-number">
+        <label for="number" class="font-bold text-lg">Account Number:</label>
+        <input type="number" class="w-[80%]  text-black  border-black rounded-md p-3" id="number" name="number">
         </div>
 
         <div class="flex flex-col items-center">
-        <label for="acc-plans" class="font-bold text-lg">Choose account type:</label>
-        <select id="acc-plans" name="acc-plans" class="w-[80%] text-black border border-black rounded-md p-3">
+        <label for="plan" class="font-bold text-lg">Choose account type:</label>
+        <select id="plan" name="plan" class="w-[80%] text-black border border-black rounded-md p-3">
             <option value="Savings">Savings</option>
             <option value="Checking" >Checking</option>
             <option value="Basic">Basic</option>
@@ -38,10 +38,10 @@
     </div>
 
         <div class="flex flex-col items-center">
-        <label for="opened-date" class="font-bold text-lg">
+        <label for="date" class="font-bold text-lg">
         Opened Date:
         </label>
-        <input type="text" class="w-[80%]  text-black  border-black rounded-md p-3 " id="opened-date" name="opened-date"  >
+        <input type="date" class="w-[80%]  text-black  border-black rounded-md p-3 " id="date" name="date"  >
     </div>
 
     <div class="flex flex-col items-center">
@@ -53,10 +53,10 @@
         </div>
 
         <div class="flex flex-col items-center">
-        <label for="customer-id" class="font-bold text-lg">
+        <label for="customer" class="font-bold text-lg">
             Customer ID:
         </label>
-        <input type="number" class="w-[80%]  text-black  border-black rounded-md p-3" id="customer-id" name="customer-id">
+        <input type="number" class="w-[80%]  text-black  border-black rounded-md p-3" id="customer" name="customer">
         </div>
         </div>
     

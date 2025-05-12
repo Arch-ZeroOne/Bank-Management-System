@@ -33,7 +33,7 @@
         <td class="">{{$user -> account_type }}</td>
         <td class="">{{$user -> balance}}</td>
         <td class="">{{$user -> opened_date}}</td>
-        <td class="">{{$user -> status}}</td>
+        <td class="">{{$user -> account_status}}</td>
         <td class="">{{$user -> customer_id}}</td>
     <td>
         <div style="display:flex; gap:20px; ">
@@ -43,7 +43,7 @@
                 @csrf
                         
             <button  style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" class="edit-btn" id="{{$user -> account_id}}">Update</button>
-
+            </form>
             <!--Form needs to sorround the button so laravel deletes it accurately -->
                 <form class="delete-account" method="POST" action="{{route("user.destroy", $user -> account_id)}}">
                 @csrf
@@ -54,9 +54,7 @@
         </div>
     </td>
     </tr>
-    
 
-    
     @endforeach
 
     </tbody>

@@ -24,14 +24,16 @@ Route::middleware('auth')->group(function () {
 
 Route::controller(AccountsController::class) -> name("user") -> prefix("user") -> group(function(){
     Route::get('/','index'); 
+    Route::post('/store',[AccountsController::class,'store']) -> name('.store');
     Route::delete("/{id}",'destroy') -> name(".destroy");
     Route::patch("/{id}", "update") -> name(".update");
     Route::get("/{id}", "getInfo") -> name(".getInfo");
+  
   });
 
 
   //*Needs to be transfered
-Route::post('/users/store',[AccountsController::class,'store']) -> name('users.store');
+
 
 
 

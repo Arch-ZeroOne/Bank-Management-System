@@ -4,7 +4,7 @@
    
 <div class=" flex flex-col items-center  shadow-xl w-[40%] rounded-xl top-[190px]  gap-3 p-4 h-md ml-auto mr-auto bg-white text-black relative " >
     <x-exit/>
-    <form method="POST" action="{{route('users.store')}}" class="flex flex-col items-center w-full gap-3 p-2   " id="add-modal">
+    <form method="POST" action="{{route('user.store')}}" class="flex flex-col items-center w-full gap-3 p-2   " id="add-modal">
     @csrf
     <label for="acc-plans" class="font-bold text-lg">Choose account type:</label>
     <select id="acc-plans" name="acc-plans" class="w-[80%] text-black border border-black rounded-md p-3">

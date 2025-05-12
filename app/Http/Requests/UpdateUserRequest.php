@@ -22,13 +22,13 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "acc-id" => 'required',
-            "acc-number" => "required",
-            "acc-plans" => "required",
-            "initial-balance" => "nullable",
-            "opened-date" => "required",
+            "id" => 'required',
+            "number" => "required",
+            "plan" => "required",
+            "balance" => "nullable",
+            "date" => "required",
             "status" => "required",
-            "customer-id" => ["required","unique:accounts","min:5", "max:5"]
+            "customer_id" => ["required","min:5", "max:5"]
         ];
     }
 }
