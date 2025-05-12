@@ -135,36 +135,19 @@
 
 
     updateFormInstance.forEach((form) => {
-           console.log("loaded");
+        
             form.addEventListener("submit", (e) => {
             e.preventDefault();
             updateModal.style.top = "0px";
+
+
         });
     });
+});
+    
+</script>
 
-        })
-  </script>
-  <!-- We acquired the id by embedding the id to the id property of the button -->
-  <!-- Ajax operation for getting form datas -->
-        <script>
-            document.querySelectorAll(".edit-btn").forEach((btn) => {
-                btn.addEventListener("click", (e) => {
-                let id = e.target.id;
-                fetch(`user/${id}`).then((response) => {
-                    return response.json();
-                    
-                }).then((data) => {
-                    document.getElementById("acc-id").value = data[0].account_id;
-                    document.getElementById("acc-number").value = data[0].account_number;
-                    document.getElementById("initial-balance").value = data[0].balance;
-                    document.getElementById("opened-date").value = data[0].opened_date;
-                    document.getElementById("customer_id").value = data[0].customer_id;
-                })
-                });
-            });
-         
-        </script>
-
+        <script src="./js/formajax.js"></script>
         
     </body>
 </html>

@@ -44,6 +44,8 @@ class AccountsController extends Controller
     public function update(UpdateUserRequest $request , $id){
         $form_infos = $request -> validated();
 
+        dd($id);
+
         DB::update("UPDATE accounts SET account_number = ? , account_type = ? , balance = ? , customer_id = ?, opened_date = ? , status = ?",
     [$form_infos["acc-id"],$form_infos["acc-number"],$form_infos['acc-plans'],$form_infos['initial-balance'],$form_infos['opened-date'],$form_infos['status'], $form_infos["customer_id"]] );
 

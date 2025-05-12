@@ -28,7 +28,7 @@ class UpdateUserRequest extends FormRequest
             "initial-balance" => "nullable",
             "opened-date" => "required",
             "status" => "required",
-            "customer_id" => ["required","unique:accounts","min:5", "max:5"]
+            "customer-id" => ["required","unique:accounts","min:5", "max:5"]
         ];
     }
 }
