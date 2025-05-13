@@ -1,8 +1,9 @@
 
     <!-- was not clickable because there is no z index -->
-<div class="w-screen h-screen  fixed bg-[rgb(0,0,0,0.2)] z-50" id="modal">
+
+<div class=" w-screen h-screen  fixed bg-[rgb(0,0,0,0.2)] z-50" id="modal">
    
-<div class=" flex flex-col items-center  shadow-xl w-[40%] rounded-xl top-[190px]  gap-3 p-4 h-md ml-auto mr-auto bg-white text-black relative " >
+<div class="flex flex-col items-center  shadow-xl w-[40%] rounded-xl top-[190px]  gap-3 p-4 h-md ml-auto mr-auto bg-white text-black relative " id="animated-addform">
     <x-exit/>
     <form method="POST" action="{{route('user.store')}}" class="flex flex-col items-center w-full gap-3 p-2   " id="add-modal">
     @csrf

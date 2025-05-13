@@ -52,9 +52,7 @@ class AccountsController extends Controller
             'opened_date' => $form_infos['date'],
             ]);
         
-
-            return ;
-
+  
             
 
     }

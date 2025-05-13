@@ -17,6 +17,7 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
+        "@formkit/auto-animate": "^0.8.2",
         "sweetalert2": "^11.19.1"
     }
 }
