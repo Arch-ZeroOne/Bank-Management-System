@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Yajira\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class TableController extends Controller
 {

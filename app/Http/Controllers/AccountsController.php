@@ -29,7 +29,7 @@ class AccountsController extends Controller
             "balance" => $form_infos['initial-balance'],
             "customer_id" => $form_infos['customer_id'],
             "opened_date" => $faker -> date(),
-            "account_status" => 1
+            "status" => 1
         ]);
 
             return redirect()   -> route("user") 

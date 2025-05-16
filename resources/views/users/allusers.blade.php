@@ -10,6 +10,7 @@
     <x-addbtn/>
 
     <table class="" id="myTable" class="display text-white">
+        
     </table>
 
     </div>

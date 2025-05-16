@@ -39,8 +39,6 @@ Route::controller(AccountsController::class) -> name("user") -> prefix("user") -
     Route::get("table/list", [TableController::class,'list' ]) -> name('table.list');
 
 
-  //*Needs to be transfered
-
 
 
 

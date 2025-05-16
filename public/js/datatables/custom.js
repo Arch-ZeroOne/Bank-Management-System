@@ -9,18 +9,17 @@
 
 function baseUrl() {
     //Equivalent to since we are in localhost : http://127.0.0.1:8000/
-    return location.protocol + "//" + location.host;
+    return location.protocol + "//" + location.host + "";
 }
-
-console.log(`${baseUrl()}/user/list`);
 
 new DataTable("#myTable", {
     //our route where we request our data's
 
-    ajax: `${baseUrl()}/user/list`,
+    ajax: baseUrl() + "/table/list",
     processing: true,
     serverSide: true,
     columnDefs: [{ targets: "_all", visible: true }],
+
     columns: [
         {
             data: "account_id",
@@ -48,8 +47,8 @@ new DataTable("#myTable", {
             title: "Opened Date",
         },
         {
-            data: "account_status",
-            name: "account_status",
+            data: "status",
+            name: "status",
             title: "Status",
         },
         {
@@ -57,5 +56,22 @@ new DataTable("#myTable", {
             name: "customer_id",
             title: "Customer ID",
         },
+        {
+            title: "Actions",
+            data: "customer_id",
+            render: function (data) {
+                return `
+                <div class="flex justify-center gap-10 p-2 items-center w-full">
+                <i class="fa solid fa-edit cursor-pointer edit-btn " name="Edit" id="${data}"  ></i>
+                <i class="fa solid fa-trash cursor-pointer" name="Delete"id"${data}"></i> 
+                </div>`;
+            },
+        },
     ],
+});
+
+document.getElementById("myTable").addEventListener("click", (e) => {
+    const id = e.target.id;
+
+    console.log(id);
 });

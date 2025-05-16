@@ -3,6 +3,7 @@
 
 // We acquire data when the update button is clicked
 document.querySelectorAll(".edit-btn").forEach((btn) => {
+    console.log("Clicked");
     btn.addEventListener("click", (e) => {
         handleFormValue(e);
     });
