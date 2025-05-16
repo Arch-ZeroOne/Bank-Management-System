@@ -30,7 +30,7 @@ Route::controller(AccountsController::class) -> name("user") -> prefix("user") -
     Route::patch("/{id}", "update") -> name(".update");
     Route::get("/{id}", "getInfo") -> name(".getInfo");
   
-  });
+});
 
 
 

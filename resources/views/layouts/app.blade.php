@@ -101,8 +101,6 @@
 
      <!-- Intercepts form submission to implement modals and waiting for form confirmation -->
     <script src="./js/confirmation.js"></script>
-
-        <script src="./js/formajax.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
          const form =  document.getElementById("animated-addform");

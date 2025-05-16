@@ -43,7 +43,7 @@ class AccountsController extends Controller
         -> update(
             [
             'account_type' => $form_infos['plan'] , 
-            'account_status' => $form_infos['status'],
+            'status' => $form_infos['status'],
             'balance' => $form_infos['balance'], 
             'opened_date' => $form_infos['date'],
             ]);

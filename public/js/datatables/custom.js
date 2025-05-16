@@ -7,6 +7,8 @@
 //name - used for sorting purposes
 //title - header of the column
 
+const updateModal = document.getElementById("update");
+
 function baseUrl() {
     //Equivalent to since we are in localhost : http://127.0.0.1:8000/
     return location.protocol + "//" + location.host + "";
@@ -58,12 +60,12 @@ new DataTable("#myTable", {
         },
         {
             title: "Actions",
-            data: "customer_id",
+            data: "account_id",
             render: function (data) {
                 return `
-                <div class="flex justify-center gap-10 p-2 items-center w-full">
-                <i class="fa solid fa-edit cursor-pointer edit-btn " name="Edit" id="${data}"  ></i>
-                <i class="fa solid fa-trash cursor-pointer" name="Delete"id"${data}"></i> 
+                <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:40px;">
+                <i class="fa solid fa-edit cursor-pointer edit-btn " name="Edit"   data-id="${data}" id="edit" ></i>
+                <i class="fa solid fa-trash cursor-pointer" name="Delete" id="delete" data-delete="${data}"></i> 
                 </div>`;
             },
         },
@@ -71,7 +73,192 @@ new DataTable("#myTable", {
 });
 
 document.getElementById("myTable").addEventListener("click", (e) => {
-    const id = e.target.id;
-
-    console.log(id);
+    const update_id = e.target.dataset.id;
+    const delete_id = e.target.dataset.delete;
+    if (e.target.id === "edit") {
+        handleFormValue(update_id);
+    } else if (e.target.id === "delete") {
+        const token = document.querySelector('input[name="_token"').value;
+        showDeleteModal(delete_id, token);
+    }
 });
+
+function handleFormValue(id) {
+    fetch(`user/${id}`)
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            showModal();
+            //Sets the value of the form from the data queried in the db
+            document.getElementById("id").value = data[0].account_id;
+            document.getElementById("number").value = Number(
+                data[0].account_number
+            );
+            document.getElementById("plan").value = data[0].account_type;
+            document.getElementById("status").value = data[0].status;
+            document.getElementById("balance").value = Number(data[0].balance);
+            document.getElementById("date").value = data[0].opened_date;
+            document.getElementById("customer").value = Number(
+                data[0].customer_id
+            );
+        });
+}
+
+document.querySelectorAll("#update-user").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        showConfirmation();
+    });
+});
+
+function showConfirmation() {
+    Swal.fire({
+        title: "Confirm?",
+        text: "You won't be able to revert this!",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Update user",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            //Gets the current form value
+            const accId = document.getElementById("id").value;
+            const accNum = document.getElementById("number").value;
+            const balance = document.getElementById("balance").value;
+            const opDate = document.getElementById("date").value;
+            const customer = document.getElementById("customer").value;
+            const plan = document.getElementById("plan").value;
+            const status = document.getElementById("status").value;
+            const token = document.querySelector('input[name="_token"').value;
+
+            //Payload to be passed in laravel
+            const payload = {
+                id: Number(accId),
+                number: Number(accNum),
+                plan: plan,
+                balance: Number(balance),
+                date: opDate,
+                status: status,
+                customer_id: Number(customer),
+            };
+
+            sendUpdateRequest(payload, token, accId);
+        }
+    });
+}
+
+async function sendUpdateRequest(payload, token, accId) {
+    try {
+        //AJAX patch operation
+        const request = await fetch(`user/${accId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": token,
+                Accept: "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (request.ok) {
+            // base route :  "http://127.0.0.1:8000/user";
+            let timerInterval;
+            Swal.fire({
+                title: "User updated!",
+                html: "<h1>Please wait shortly</h1>",
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                    timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                },
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (
+                    result.dismiss === Swal.DismissReason.timer ||
+                    result.dismiss === Swal.DismissReason.backdrop ||
+                    result.dismiss === Swal.DismissReason.cancel ||
+                    result.dismiss === Swal.DismissReason.close ||
+                    result.dismiss === Swal.DismissReason.esc
+                ) {
+                    window.location = "http://127.0.0.1:8000/user";
+                }
+            });
+        }
+    } catch (error) {
+        console.log(error.data);
+    }
+}
+
+function showDeleteModal(id, token) {
+    Swal.fire({
+        title: "Wanna delete account?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Confirm",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            sendDeleteRequest(id, token);
+        }
+    });
+}
+
+async function sendDeleteRequest(id, token) {
+    console.log(id);
+    console.log(token);
+    const request = await fetch(`user/${id}`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": token,
+        },
+    });
+
+    if (request.ok) {
+        Swal.fire({
+            title: "Deletion Successfull!",
+            html: "<h1>Please wait shortly</h1>",
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            },
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (
+                result.dismiss === Swal.DismissReason.timer ||
+                result.dismiss === Swal.DismissReason.backdrop ||
+                result.dismiss === Swal.DismissReason.cancel ||
+                result.dismiss === Swal.DismissReason.close ||
+                result.dismiss === Swal.DismissReason.esc
+            ) {
+                window.location = "http://127.0.0.1:8000/user";
+            }
+        });
+    }
+}
+
+function showModal() {
+    updateModal.style.top = "0px";
+}
+function closeModal() {
+    updateModal.style.top = "-900px";
+}
+
+function loader() {}
