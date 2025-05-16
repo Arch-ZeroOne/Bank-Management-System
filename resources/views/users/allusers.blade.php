@@ -10,55 +10,7 @@
     <x-addbtn/>
 
     <table class="" id="myTable" class="display text-white">
-        <thead>
-        <tr class="">
-            <th class="">Account ID</th>
-            <th class="">Account Number</th>
-            <th class="">Account Type</th>
-            <th class="">Balance</th>
-            <th class="">Opened Date</th>
-            <th class="">Status</th>
-            <th class="">Customer ID</th>
-            <th></th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-    @foreach ($users as $user )
-    
-    <tr>
-        <td class="">{{$user -> account_id}}</td>
-        <td class="">{{$user -> account_number}}</td>
-        <td class="">{{$user -> account_type }}</td>
-        <td class="">{{$user -> balance}}</td>
-        <td class="">{{$user -> opened_date}}</td>
-        <td class="">{{$user -> account_status}}</td>
-        <td class="">{{$user -> customer_id}}</td>
-    <td>
-        <div style="display:flex; gap:20px; ">
-            <!-- We dont need the route here since we will call the route in the js script -->
-            <form method="POST"  class="update-account" >
-                @method("PATCH")
-                @csrf
-                        
-            <button  style="background-color:green; color:white; padding:10px; width: 100px; border-radius: 15px;" class="edit-btn" id="{{$user -> account_id}}">Update</button>
-            </form>
-            <!--Form needs to sorround the button so laravel deletes it accurately -->
-                <form class="delete-account" method="POST" action="{{route("user.destroy", $user -> account_id)}}">
-                @csrf
-                @method("DELETE")
-            <button style="background-color:red; color:white; padding:10px; width: 100px; border-radius: 15px;" class="delete">Delete</button>
-            </form>
-
-        </div>
-    </td>
-    </tr>
-
-    @endforeach
-
-    </tbody>
-</table>
+    </table>
 
     </div>
 

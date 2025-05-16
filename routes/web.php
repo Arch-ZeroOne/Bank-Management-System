@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\LoanRequestController;
@@ -23,13 +24,19 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::controller(AccountsController::class) -> name("user") -> prefix("user") -> group(function(){
-    Route::get('/','index'); 
+    Route::view('/','users.allusers'); 
     Route::post('/store',[AccountsController::class,'store']) -> name('.store');
     Route::delete("/{id}",'destroy') -> name(".destroy");
     Route::patch("/{id}", "update") -> name(".update");
     Route::get("/{id}", "getInfo") -> name(".getInfo");
   
   });
+
+
+
+  //Table Routes
+
+    Route::get("table/list", [TableController::class,'list' ]) -> name('table.list');
 
 
   //*Needs to be transfered

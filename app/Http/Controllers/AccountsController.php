@@ -5,23 +5,20 @@ use App\Http\Requests\AddUserRequest;;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 use App\Http\Requests\UpdateUserRequest;
+use Yajra\DataTables\DataTables;
+
 class AccountsController extends Controller
 {
     
-    public function index(){
-        $query = DB::select('select * from accounts');
 
-        return view('users.allusers',[
-            'users' => $query ,
-        ]);
-    }
+
+    //Querying for form update values
     public function getInfo(String $id){
         $data =  DB::table("accounts") -> where("account_id", $id) -> get();
-       
         return response() -> json($data);
 
     }
-
+    
     public function store(AddUserRequest $request){
         $faker = Faker::create();
         $form_infos = $request -> validated();
@@ -39,7 +36,6 @@ class AccountsController extends Controller
                                 -> with("message", "User added Successfully");
     }
 
-    
     public function update(UpdateUserRequest $request , $id){
         $form_infos = $request -> validated();
         DB::table('accounts') 
@@ -51,10 +47,6 @@ class AccountsController extends Controller
             'balance' => $form_infos['balance'], 
             'opened_date' => $form_infos['date'],
             ]);
-        
-  
-            
-
     }
     public function destroy(String $id){
         DB::table('accounts') -> where("account_id",$id) -> delete();
@@ -63,4 +55,6 @@ class AccountsController extends Controller
 
 
     }
+
+ 
 }
