@@ -11,6 +11,7 @@ const updateModal = document.getElementById("update");
 const addBtn = document.getElementById("add-user");
 const addNewModal = document.getElementById("modal");
 const closeAddModal = document.querySelectorAll("#quit");
+const addNewBtn = document.getElementById("add");
 
 function baseUrl() {
     //Equivalent to since we are in localhost : http://127.0.0.1:8000/
@@ -69,7 +70,7 @@ let accountsTable = new DataTable("#myTable", {
                 <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:20px;">
                 <i class="fa solid fa-edit cursor-pointer edit-btn " name="Edit"   data-id="${data}" id="edit" ></i>
                 <i class="fa solid fa-trash cursor-pointer" name="Delete" id="delete" data-delete="${data}"></i> 
-                <i class="fa-solid fa-circle-plus cursor-pointer"  id="add"></i>
+               
                 </div>`;
             },
         },
@@ -84,8 +85,6 @@ document.getElementById("myTable").addEventListener("click", (e) => {
     } else if (e.target.id === "delete") {
         const token = document.querySelector('input[name="_token"').value;
         showDeleteModal(delete_id, token);
-    } else if (e.target.id === "add") {
-        showAddModal();
     }
 });
 closeAddModal.forEach((btn) => {
@@ -95,7 +94,22 @@ closeAddModal.forEach((btn) => {
     });
 });
 addBtn.addEventListener("click", () => {
-    sendAddRequest();
+    Swal.fire({
+        title: "Confirm?",
+        text: "You won't be able to revert this!",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Add user",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            sendAddRequest();
+        }
+    });
+});
+addNewBtn.addEventListener("click", () => {
+    showAddModal();
 });
 
 function handleFormValue(id) {
@@ -292,6 +306,15 @@ async function sendAddRequest() {
             body: JSON.stringify(payload),
         });
 
+        if (!request.ok) {
+            const { message } = await request.json();
+            Swal.fire({
+                title: "Unsuccessfull",
+                text: message,
+                icon: "error",
+            });
+        }
+
         if (request.ok) {
             Swal.fire({
                 title: "User has been added Successfully!",
@@ -327,7 +350,9 @@ async function sendAddRequest() {
                 }
             });
         }
-    } catch (error) {}
+    } catch (error) {
+        console.log("Error");
+    }
 }
 
 function showModal() {

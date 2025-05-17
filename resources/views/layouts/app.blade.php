@@ -56,7 +56,7 @@
         @if ($errors -> all())
         <script >
             let error = @json($errors -> all());
-            console.log(error);
+             console.log("error");
             Swal.fire({
                 icon : 'error',
                 title : "Error",

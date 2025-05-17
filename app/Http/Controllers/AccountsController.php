@@ -5,7 +5,7 @@ use App\Http\Requests\AddUserRequest;;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 use App\Http\Requests\UpdateUserRequest;
-use Yajra\DataTables\DataTables;
+
 
 class AccountsController extends Controller
 {
