@@ -9,10 +9,9 @@ class TableController extends Controller
 {
     
     public function list(){
-        $query = DB::select("SELECT * from accounts");
+        $query = DB::select("select * from accounts");
 
            //Gets datatables values and convert it into table row
-
         return DataTables::of($query) -> make(true);
     }
 }

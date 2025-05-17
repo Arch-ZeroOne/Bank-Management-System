@@ -25,8 +25,8 @@ class AccountsController extends Controller
 
         DB::table("accounts") -> insert([
             "account_number" => $faker -> randomNumber(9,true), 
-            "account_type" => $form_infos['acc-plans'],
-            "balance" => $form_infos['initial-balance'],
+            "account_type" => $form_infos['account_type'],
+            "balance" => $form_infos['balance'],
             "customer_id" => $form_infos['customer_id'],
             "opened_date" => $faker -> date(),
             "status" => 1
@@ -51,10 +51,8 @@ class AccountsController extends Controller
     public function destroy(String $id){
         DB::table('accounts') -> where("account_id",$id) -> delete();
 
-        return redirect() -> route("user");
+        
 
 
     }
-
- 
 }

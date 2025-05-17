@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="flex justify-center w-full mt-5 flex-col items-center">
-    <x-addbtn/>
+    
 
     <table class="" id="myTable" class="display text-white">
         

@@ -22,8 +22,8 @@ class AddUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "acc-plans" => "required",
-            "initial-balance" => "nullable",
+            "account_type" => "required",
+            "balance" => "nullable",
             "customer_id" => ["required","unique:accounts","min:5", "max:5"]
         ];
     }

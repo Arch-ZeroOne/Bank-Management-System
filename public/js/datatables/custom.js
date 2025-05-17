@@ -8,19 +8,23 @@
 //title - header of the column
 
 const updateModal = document.getElementById("update");
+const addBtn = document.getElementById("add-user");
+const addNewModal = document.getElementById("modal");
+const closeAddModal = document.querySelectorAll("#quit");
 
 function baseUrl() {
     //Equivalent to since we are in localhost : http://127.0.0.1:8000/
     return location.protocol + "//" + location.host + "";
 }
 
-new DataTable("#myTable", {
+let accountsTable = new DataTable("#myTable", {
     //our route where we request our data's
 
     ajax: baseUrl() + "/table/list",
     processing: true,
     serverSide: true,
     columnDefs: [{ targets: "_all", visible: true }],
+    stateSave: true,
 
     columns: [
         {
@@ -50,7 +54,6 @@ new DataTable("#myTable", {
         },
         {
             data: "status",
-            name: "status",
             title: "Status",
         },
         {
@@ -63,9 +66,10 @@ new DataTable("#myTable", {
             data: "account_id",
             render: function (data) {
                 return `
-                <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:40px;">
+                <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:20px;">
                 <i class="fa solid fa-edit cursor-pointer edit-btn " name="Edit"   data-id="${data}" id="edit" ></i>
                 <i class="fa solid fa-trash cursor-pointer" name="Delete" id="delete" data-delete="${data}"></i> 
+                <i class="fa-solid fa-circle-plus cursor-pointer"  id="add"></i>
                 </div>`;
             },
         },
@@ -80,7 +84,18 @@ document.getElementById("myTable").addEventListener("click", (e) => {
     } else if (e.target.id === "delete") {
         const token = document.querySelector('input[name="_token"').value;
         showDeleteModal(delete_id, token);
+    } else if (e.target.id === "add") {
+        showAddModal();
     }
+});
+closeAddModal.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        updateModal.style.top = "-900px";
+        addNewModal.style.top = "-900px";
+    });
+});
+addBtn.addEventListener("click", () => {
+    sendAddRequest();
 });
 
 function handleFormValue(id) {
@@ -188,7 +203,8 @@ async function sendUpdateRequest(payload, token, accId) {
                     result.dismiss === Swal.DismissReason.close ||
                     result.dismiss === Swal.DismissReason.esc
                 ) {
-                    window.location = "http://127.0.0.1:8000/user";
+                    accountsTable.ajax.reload();
+                    closeModal();
                 }
             });
         }
@@ -214,8 +230,6 @@ function showDeleteModal(id, token) {
 }
 
 async function sendDeleteRequest(id, token) {
-    console.log(id);
-    console.log(token);
     const request = await fetch(`user/${id}`, {
         method: "DELETE",
         headers: {
@@ -224,6 +238,7 @@ async function sendDeleteRequest(id, token) {
     });
 
     if (request.ok) {
+        console.log("request ok");
         Swal.fire({
             title: "Deletion Successfull!",
             html: "<h1>Please wait shortly</h1>",
@@ -248,17 +263,83 @@ async function sendDeleteRequest(id, token) {
                 result.dismiss === Swal.DismissReason.close ||
                 result.dismiss === Swal.DismissReason.esc
             ) {
-                window.location = "http://127.0.0.1:8000/user";
+                accountsTable.ajax.reload();
             }
         });
     }
 }
 
+async function sendAddRequest() {
+    const balance = document.getElementById("initial-balance").value;
+    const customer = document.getElementById("customer-id").value;
+    const plan = document.getElementById("acc-plans").value;
+    const token = document.querySelector('input[name="_token"').value;
+
+    const payload = {
+        account_type: plan,
+        balance: balance,
+        customer_id: customer,
+    };
+
+    try {
+        const request = await fetch("user/store", {
+            method: "POST",
+            headers: {
+                "CONTENT-TYPE": "application/json",
+                "X-CSRF-TOKEN": token,
+                Accept: "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (request.ok) {
+            Swal.fire({
+                title: "User has been added Successfully!",
+                html: "<h1>Please wait shortly</h1>",
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                    timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                },
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (
+                    result.dismiss === Swal.DismissReason.timer ||
+                    result.dismiss === Swal.DismissReason.backdrop ||
+                    result.dismiss === Swal.DismissReason.cancel ||
+                    result.dismiss === Swal.DismissReason.close ||
+                    result.dismiss === Swal.DismissReason.esc
+                ) {
+                    closeModal();
+                    document.getElementById("initial-balance").value = "0";
+
+                    document.getElementById("customer-id").value = "";
+                    document.getElementById("acc-plans").value = "Savings";
+
+                    accountsTable.ajax.reload();
+                }
+            });
+        }
+    } catch (error) {}
+}
+
 function showModal() {
     updateModal.style.top = "0px";
 }
+function showAddModal() {
+    addNewModal.style.top = "0px";
+}
+
 function closeModal() {
     updateModal.style.top = "-900px";
+    addNewModal.style.top = "-900px";
 }
 
 function loader() {}

@@ -3,6 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <!-- CSRF Token for AJAX request -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
@@ -32,19 +35,10 @@
         <div class="min-h-screen " >
             @include('layouts.navigation')
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
     
             <!-- Page Content -->
             
             <main class="">
-                
                 {{ $slot }}
             </main>
     
@@ -56,13 +50,13 @@
         <script src="/js/table.js">
 
         </script>
-        <script src="js/modals.js"></script>
         <script  src="https://cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
-        <script  src="js/alerts.js" ></script>
+ 
 
         @if ($errors -> all())
-        <script src="js/error.js">
+        <script >
             let error = @json($errors -> all());
+            console.log(error);
             Swal.fire({
                 icon : 'error',
                 title : "Error",
@@ -99,18 +93,8 @@
         @endif
 
 
-     <!-- Intercepts form submission to implement modals and waiting for form confirmation -->
-    <script src="./js/confirmation.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-         const form =  document.getElementById("animated-addform");
-
-        form.classList.add("animate__animated", "animate__fadeInDown")
-        }); 
-    </script>
-
     <script src="js/datatables/custom.js"></script>
-    <script src="js/datatables/initialize.js"></script>
+
         
     </body>
 </html>
