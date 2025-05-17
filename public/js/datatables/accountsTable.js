@@ -70,7 +70,7 @@ let accountsTable = new DataTable("#myTable", {
                 <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:20px;">
                 <i class="fa solid fa-edit cursor-pointer edit-btn " name="Edit"   data-id="${data}" id="edit" ></i>
                 <i class="fa solid fa-trash cursor-pointer" name="Delete" id="delete" data-delete="${data}"></i> 
-               
+
                 </div>`;
             },
         },
@@ -118,6 +118,7 @@ function handleFormValue(id) {
             return response.json();
         })
         .then((data) => {
+            console.log(data);
             showModal();
             //Sets the value of the form from the data queried in the db
             document.getElementById("id").value = data[0].account_id;

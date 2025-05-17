@@ -7,12 +7,12 @@
     </x-slot>
 
 
-    <div class="flex justify-center w-full mt-5 flex-col items-center">
-         <x-buttons.add/>
+    <div class="flex justify-center w-full mt-1 flex-col items-center">
+        <x-buttons.add />
 
-    <table class="" id="myTable" class="display text-white">
-        
-    </table>
+        <table class="" id="myTable" class="display text-white">
+
+        </table>
 
     </div>
 
