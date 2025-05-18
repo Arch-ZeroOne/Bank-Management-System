@@ -5,11 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
     <!-- CSRF Token for AJAX request -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Sure Bank</title>
+    <link rel="icon" href="{{ '/images/logo.png' }}">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -64,6 +64,8 @@
                             </div>
                         </button>
                     </x-slot>
+
+
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
@@ -142,6 +144,7 @@
 
 
     <script src="js/datatables/accountsTable.js"></script>
+    <script src="js/datatables/requestTable.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/chart.js"></script>
 

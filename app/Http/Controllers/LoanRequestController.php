@@ -2,16 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateStatusRequests;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
+
 class LoanRequestController extends Controller
 {
-    public function index(){
-     $query = DB::select('select * from loan_approvals');
+ public function index()
+ {
 
-     return view('users.loanrequests',[
-       'requests' => $query,
-     ]);
+  return view('users.loanrequests');
 
-    }
+ }
+ public function list()
+ {
+  $query = DB::table('loan_approvals')->select();
+
+  return DataTables::of($query)->make(true);
+ }
+
+ public function updateStatus(UpdateStatusRequests $request)
+ {
+  $validated = $request->validated();
+  DB::table("loan_approvals")->where("loan_approval_id", $validated['loan_approval_id'])->update([
+   "status" => $validated['status'],
+  ]);
+ }
 }

@@ -68,8 +68,8 @@ let accountsTable = new DataTable("#myTable", {
             render: function (data) {
                 return `
                 <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:20px;">
-                <i class="fa solid fa-edit cursor-pointer edit-btn " name="Edit"   data-id="${data}" id="edit" ></i>
-                <i class="fa solid fa-trash cursor-pointer" name="Delete" id="delete" data-delete="${data}"></i> 
+                <i class="fa solid fa-edit cursor-pointer edit-btn text-green-500" name="Edit"   data-id="${data}" id="edit" ></i>
+                <i class="fa solid fa-trash cursor-pointer text-red-500" name="Delete" id="delete" data-delete="${data}"></i> 
 
                 </div>`;
             },

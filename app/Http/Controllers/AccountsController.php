@@ -36,7 +36,7 @@ class AccountsController extends Controller
    ->with("message", "User added Successfully");
  }
 
- public function update(UpdateUserRequest $request, $id)
+ public function update(UpdateUserRequest $request)
  {
   $form_infos = $request->validated();
   DB::table('accounts')

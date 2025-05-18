@@ -30,7 +30,6 @@ Route::controller(AccountsController::class)->name("user")->prefix("user")->grou
 
 Route::controller(DashBoardController::class)->name("dashboard")->prefix("dashboard")->group(function () {
  Route::get("/accounts", 'getUsersCount');
-
  Route::get("/getCount", 'getTypeCount');
  Route::get('/getStatus', 'getStatusCount');
 });
@@ -43,7 +42,14 @@ Route::get("/dashboard", function () {
 })->name('dashboard');
 
 //View for users
-Route::get('/loanrequests', [LoanRequestController::class, 'index'])->name('loanrequests');
+
+Route::controller(LoanRequestController::class)->name('loanrequests')->prefix('loanrequests')->group(function () {
+ Route::get('/', 'index');
+ Route::get("/getAll", 'list');
+ Route::patch("/update", 'updateStatus');
+
+});
+
 Route::get('/loans', [LoansController::class, 'index'])->name('loans');
 Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions');
 
