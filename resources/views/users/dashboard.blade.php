@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="p-2 flex items-center gap-3" style="font-family: Winky Rough">
+    <div class="p-2 flex items-center gap-3 justify-center" style="font-family: Winky Rough">
         <div class="bg-blue-500 shadow-lg rounded-md  flex justify-center items-center text-white h-50 w-80 gap-2 ">
             <div class="bg-blue-500 shadow-lg rounded-md  flex justify-center items-center text-white h-50 w-80 gap-2 ">
                 <div class="flex flex-col items-center w-full ">
@@ -41,10 +41,18 @@
         </div>
 
     </div>
+    <!--Chart -->
 
-    <div>
-        <canvas id="myChart"></canvas>
+    <div class="flex items-center justify-center">
+        <div>
+            <canvas id="pie-chart">
+            </canvas>
+        </div>
+        <div>
+            <canvas id="doughnut-chart"></canvas>
+        </div>
     </div>
+
     <script>
         const users = document.getElementById("users");
         const customers = document.getElementById("customers");
@@ -53,17 +61,15 @@
         fetch(`dashboard/accounts`).then((response) => {
             return response.json();
         }).then((data) => {
-            users.textContent = data.count;
-        })
-        fetch(`dashboard/customers`).then((response) => {
-            return response.json();
-        }).then((data) => {
-            customers.textContent = data.count;
-        })
-        fetch(`dashboard/transactions`).then((response) => {
-            return response.json();
-        }).then((data) => {
-            transactions.textContent = data.count;
+            const {
+                accounts,
+                customer,
+                transaction
+            } = data;
+
+            users.textContent = accounts;
+            customers.textContent = customer;
+            transactions.textContent = transaction;
         })
     </script>
 </x-app-layout>

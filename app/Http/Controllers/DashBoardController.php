@@ -6,24 +6,34 @@ use Illuminate\Support\Facades\DB;
 
 class DashBoardController extends Controller
 {
- public function getAccountsCount()
+ public function getUsersCount()
  {
-  $data = DB::table('accounts')->count();
+  $accounts    = DB::table('accounts')->count();
+  $customer    = DB::table('customer')->count();
+  $transaction = DB::table('transactions')->count();
 
-  return response()->json(['count' => $data]);
- }
- public function getCustomersCount()
- {
-  $data = DB::table('customer')->count();
-
-  return response()->json(['count' => $data]);
+  return response()->json(['accounts' => $accounts, 'customer' => $customer, "transaction" => $transaction]);
  }
 
- public function getTransactionsCount()
+ public function getTypeCount()
  {
-  $data = DB::table('transactions')->count();
+  $basicCount    = DB::table('accounts')->where('account_type', 'Basic')->count();
+  $savingsCount  = DB::table('accounts')->where('account_type', 'Checking')->count();
+  $checkingCount = DB::table('accounts')->where('account_type', 'Savings')->count();
 
-  return response()->json(['count' => $data]);
+  return response()->json(["basicCount" => $basicCount,
+   "savingsCount" => $savingsCount, 'checkingCount' => $checkingCount]);
+
+ }
+
+ public function getStatusCount()
+ {
+  $activeCount   = DB::table('accounts')->where('status', '1')->count();
+  $inactiveCount = DB::table('accounts')->where('status', '0')->count();
+
+  return response()->json([
+   'active' => $activeCount, 'inactive' => $inactiveCount,
+  ]);
 
  }
 }

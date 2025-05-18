@@ -29,9 +29,10 @@ Route::controller(AccountsController::class)->name("user")->prefix("user")->grou
 });
 
 Route::controller(DashBoardController::class)->name("dashboard")->prefix("dashboard")->group(function () {
- Route::get("/accounts", 'getAccountsCount');
- Route::get("/customers", 'getCustomersCount');
- Route::get("/transactions", 'getTransactionsCount');
+ Route::get("/accounts", 'getUsersCount');
+
+ Route::get("/getCount", 'getTypeCount');
+ Route::get('/getStatus', 'getStatusCount');
 });
 
 //Table Routes
