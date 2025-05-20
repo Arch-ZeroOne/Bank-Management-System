@@ -32,9 +32,15 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Tables Library-->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/14.0.0/material-components-web.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.material.css">
+
 </head>
 
-<body class="bg-[#C3C3C3]">
+<body>
 
 
     <div class="min-h-screen" style="display:flex; ">
@@ -57,9 +63,8 @@
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d=" M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4
+    4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>
@@ -85,10 +90,6 @@
                     </x-slot>
                 </x-dropdown>
             </div>
-
-
-
-
             <main class="">
                 {{ $slot }}
             </main>
@@ -97,8 +98,11 @@
         <x-accounts.accformmodal />
         <x-accounts.updateformmodal />
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/2.3.0/js/dataTables.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/14.0.0/material-components-web.min.js">
+    </script>
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.material.js"></script>
     <script src="/js/table.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -145,6 +149,7 @@
 
     <script src="js/datatables/accountsTable.js"></script>
     <script src="js/datatables/requestTable.js"></script>
+    <script src="js/dataTables/loansTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/chart.js"></script>
 

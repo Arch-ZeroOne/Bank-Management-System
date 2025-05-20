@@ -45,12 +45,16 @@ Route::get("/dashboard", function () {
 
 Route::controller(LoanRequestController::class)->name('loanrequests')->prefix('loanrequests')->group(function () {
  Route::get('/', 'index');
- Route::get("/getAll", 'list');
- Route::patch("/update", 'updateStatus');
-
+ Route::get("/getAll", 'list')->name(".list");
+ Route::patch("/update", 'updateStatus')->name(".update");
 });
 
-Route::get('/loans', [LoansController::class, 'index'])->name('loans');
+Route::controller(LoansController::class)->name('loans')->prefix('loans')->group(function () {
+ Route::get('/', 'index');
+ Route::get("/list", 'list')->name('.list');
+ Route::patch("/update", 'update')->name(".update");
+});
+
 Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions');
 
 require __DIR__ . '/auth.php';

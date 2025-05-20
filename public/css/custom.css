@@ -3,4 +3,8 @@ div.dt-container select.dt-input {
     width: 79px;
 }
 
-
+#myTable_wrapper,
+#requestTable_wrapper,
+#loansTable_wrapper {
+    width: 100%;
+}

@@ -45,8 +45,8 @@ let requestTable = new DataTable("#requestTable", {
             render: function (data) {
                 return `
                 <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:20px; ">
-                <i class="fa-solid fa-thumbs-up text-green-600 cursor-pointer" id="approve" title="Approve Request" data-approve="${data}"></i>
-                <i class="fa-solid fa-thumbs-down text-red-500 cursor-pointer" id="decline" title="Decline Request"data-decline="${data}" ></i>
+                    <img class="edit-btn cursor-pointer h-20"  id="approve" title="Approve Request" data-approve="${data}" src="../../images/approve-loan.png" style="height:40px;"> 
+                    <img class="edit-btn cursor-pointer h-20"  id="decline" title="Decline Request"data-decline="${data}" src="../../images/reject-loan.png" style="height:40px;"> 
 
                 </div>`;
             },

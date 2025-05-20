@@ -10,7 +10,7 @@
     <div class="flex justify-center w-full mt-1 flex-col items-center">
         <x-buttons.add />
 
-        <table class="" id="myTable" class="display text-white">
+        <table class="" id="myTable" class="display text-white mdl-data-table">
 
         </table>
 

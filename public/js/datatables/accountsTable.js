@@ -67,9 +67,10 @@ let accountsTable = new DataTable("#myTable", {
             data: "account_id",
             render: function (data) {
                 return `
-                <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:20px;">
-                <i class="fa solid fa-edit cursor-pointer edit-btn text-green-500" name="Edit"   data-id="${data}" id="edit" ></i>
-                <i class="fa solid fa-trash cursor-pointer text-red-500" name="Delete" id="delete" data-delete="${data}"></i> 
+                <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:15px;">
+                <img class="edit-btn cursor-pointer h-20"  name="Edit"   data-id="${data}" id="edit"  title="Edit Details" src="../../images/edit-user.png" style="height:40px;"> 
+                <img class="cursor-pointer h-20"  name="Delete" id="delete" data-delete="${data}" title="Delete User" src="../../images/delete-user.png" style="height:40px;">
+
 
                 </div>`;
             },
@@ -281,6 +282,15 @@ async function sendDeleteRequest(id, token) {
                 accountsTable.ajax.reload();
             }
         });
+    } else {
+        if (!request.ok) {
+            const { message } = await request.json();
+            Swal.fire({
+                title: "Unsuccessfull",
+                text: message,
+                icon: "error",
+            });
+        }
     }
 }
 
