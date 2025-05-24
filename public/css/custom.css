@@ -5,6 +5,7 @@ div.dt-container select.dt-input {
 
 #myTable_wrapper,
 #requestTable_wrapper,
-#loansTable_wrapper {
+#loansTable_wrapper,
+#transactionTable_wrapper {
     width: 100%;
 }

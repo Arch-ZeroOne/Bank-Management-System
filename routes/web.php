@@ -55,6 +55,9 @@ Route::controller(LoansController::class)->name('loans')->prefix('loans')->group
  Route::patch("/update", 'update')->name(".update");
 });
 
-Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions');
+Route::controller(TransactionsController::class)->name("transactions")->prefix("transactions")->group(function () {
+ Route::get('/', 'index');
+ Route::get("/list", 'list')->name('.list');
+});
 
 require __DIR__ . '/auth.php';

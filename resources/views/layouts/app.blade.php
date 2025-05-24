@@ -46,8 +46,6 @@
     <div class="min-h-screen" style="display:flex; ">
         <!-- Extends a template -->
         @include('layouts.navigation')
-
-
         <!-- Page Content -->
         <div class="w-full">
 
@@ -103,53 +101,11 @@
     </script>
     <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.3.1/js/dataTables.material.js"></script>
-    <script src="/js/table.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-    @if ($errors->all())
-        <script>
-            let error = @json($errors->all());
-            console.log("error");
-            Swal.fire({
-                icon: 'error',
-                title: "Error",
-                text: error[0],
-            })
-        </script>
-    @endif
-    @if (session('message'))
-        <script>
-            let message = @json(session('message'));
-            let timerInterval;
-            Swal.fire({
-                title: "User successfully added!",
-                text: message,
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector("b");
-                    timerInterval = setInterval(() => {
-                        timer.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100);
-                },
-                willClose: () => {
-                    clearInterval(timerInterval);
-                }
-            }).then((result) => {
-                /* Read more about handling dismissals below */
-                if (result.dismiss === Swal.DismissReason.timer) {
-
-                }
-            });
-        </script>
-    @endif
-
-
     <script src="js/datatables/accountsTable.js"></script>
     <script src="js/datatables/requestTable.js"></script>
     <script src="js/dataTables/loansTables.js"></script>
+    <script src="js/dataTables/transactionsTable.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/chart.js"></script>
 

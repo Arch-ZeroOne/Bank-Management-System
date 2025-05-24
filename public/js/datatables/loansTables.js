@@ -92,8 +92,8 @@ document.getElementById("loansTable").addEventListener("click", (e) => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Decline",
-            cancelButtonText: "Cancel",
+            confirmButtonText: "Confirm",
+            cancelButtonText: "Decline",
         }).then((result) => {
             if (result.isConfirmed) {
                 toggleStatus(false, e.target.dataset.unpaid);
