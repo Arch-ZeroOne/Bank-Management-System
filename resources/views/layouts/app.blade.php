@@ -19,6 +19,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="./css/modal.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <!-- Winky Rough Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,6 +42,8 @@
 </head>
 
 <body>
+
+
 
 
     <div class="min-h-screen" style="display:flex; ">
@@ -92,6 +95,25 @@
                 {{ $slot }}
             </main>
         </div>
+
+
+
+        <!-- From Uiverse.io by devAaus -->
+        <div class="w-full fixed  bg-[rgb(0,0,0,0.2)] h-screen   z-50 flex items-center justify-center invisible "
+            id="loader">
+
+            <div class="flex-col gap-4 w-full flex items-center justify-center">
+                <div
+                    class="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full">
+                    <div
+                        class="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
 
         <x-accounts.accformmodal />
         <x-accounts.updateformmodal />

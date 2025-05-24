@@ -12,6 +12,9 @@ const addBtn = document.getElementById("add-user");
 const addNewModal = document.getElementById("modal");
 const closeAddModal = document.querySelectorAll("#quit");
 const addNewBtn = document.getElementById("add");
+const loader = document.getElementById("loader");
+
+console.log(loader);
 
 function baseUrl() {
     //Equivalent to since we are in localhost : http://127.0.0.1:8000/
@@ -114,12 +117,13 @@ addNewBtn.addEventListener("click", () => {
 });
 
 function handleFormValue(id) {
+    showLoader();
     fetch(`user/${id}`)
         .then((response) => {
             return response.json();
         })
         .then((data) => {
-            console.log(data);
+            closeLoader();
             showModal();
             //Sets the value of the form from the data queried in the db
             document.getElementById("id").value = data[0].account_id;
@@ -351,9 +355,7 @@ async function sendAddRequest() {
                     result.dismiss === Swal.DismissReason.close ||
                     result.dismiss === Swal.DismissReason.esc
                 ) {
-                    closeModal();
                     document.getElementById("initial-balance").value = "0";
-
                     document.getElementById("customer-id").value = "";
                     document.getElementById("acc-plans").value = "Savings";
 
@@ -377,5 +379,10 @@ function closeModal() {
     updateModal.style.top = "-900px";
     addNewModal.style.top = "-900px";
 }
+function showLoader() {
+    loader.classList.remove("invisible");
+}
 
-function loader() {}
+function closeLoader() {
+    loader.classList.add("invisible");
+}
