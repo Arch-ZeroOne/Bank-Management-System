@@ -10,3 +10,6 @@ div.dt-container select.dt-input {
     width: 100%;
     cursor: pointer;
 }
+.mdc-data-table__cell {
+    text-align: center;
+}

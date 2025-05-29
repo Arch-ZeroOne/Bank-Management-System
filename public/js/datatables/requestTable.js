@@ -23,11 +23,7 @@ let requestTable = new DataTable("#requestTable", {
             name: "approval_date",
             title: "Request Date",
         },
-        {
-            data: "status",
-            name: "status",
-            title: "Status",
-        },
+
         {
             data: "employee_id",
             name: "employee_id",
@@ -38,6 +34,20 @@ let requestTable = new DataTable("#requestTable", {
             name: "loan_id",
             title: "Loan ID",
         },
+        {
+            data: "status",
+            name: "status",
+            render: function (data) {
+                if (data === "Approved") {
+                    return `<span class="text-green-600 font-bold">${data}</span>`;
+                } else if (data === "Ongoing") {
+                    return `<span class=" font-bold" style="color:#F7B05B">${data}</span>`;
+                } else if (data === "Rejected") {
+                    return `<span class="text-red-600 font-bold">${data}</span>`;
+                }
+            },
+            title: "Status",
+        },
 
         {
             title: "Actions",
@@ -45,9 +55,8 @@ let requestTable = new DataTable("#requestTable", {
             render: function (data) {
                 return `
                 <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:20px; ">
-                    <img class="edit-btn cursor-pointer h-20"  id="approve" title="Approve Request" data-approve="${data}" src="../../images/approve-loan.png" style="height:40px;"> 
-                    <img class="edit-btn cursor-pointer h-20"  id="decline" title="Decline Request"data-decline="${data}" src="../../images/reject-loan.png" style="height:40px;"> 
-
+                <i class="fa-regular fa-thumbs-up edit-btn text-lg" id="approve" title="Approve Request" data-approve="${data}"> </i>
+                <i class="fa-regular fa-thumbs-down edit-btn text-lg" id="decline" title="Decline Request"data-decline="${data}"></i>
                 </div>`;
             },
         },
@@ -97,52 +106,71 @@ function showDeclineConfirmation(id) {
 }
 
 async function sendRequest(status, id) {
-    const accessToken = document.querySelector("input[name=_token]").value;
-    const loanStatus = status ? "Approved" : "Rejected";
+    const getPrevious = await fetch(`loanrequests/${id}`);
+    let decided = false;
 
-    const payload = {
-        loan_approval_id: id,
-        status: loanStatus,
-    };
+    if (getPrevious.ok) {
+        const data = await getPrevious.json();
+        const status = data[0].status;
 
-    const request = await fetch("loanrequests/update", {
-        method: "PATCH",
-        headers: {
-            "X-CSRF-TOKEN": accessToken,
-            "CONTENT-TYPE": "application/json",
-            Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
-    });
+        if (status !== "Ongoing") {
+            decided = true;
+            Swal.fire({
+                icon: "error",
+                title: "Status already decided",
+                text: "User request has already been decided by the admin",
+            });
+        }
+    }
 
-    if (request.ok) {
-        let timerInterval;
-        Swal.fire({
-            title: "Status Updated!",
-            html: "<h1>Please wait shortly</h1>",
-            timer: 2000,
-            timerProgressBar: true,
-            didOpen: () => {
-                Swal.showLoading();
-                const timer = Swal.getPopup().querySelector("b");
-                timerInterval = setInterval(() => {
-                    timer.textContent = `${Swal.getTimerLeft()}`;
-                }, 100);
+    if (!decided) {
+        const accessToken = document.querySelector("input[name=_token]").value;
+        const loanStatus = status ? "Approved" : "Rejected";
+
+        const payload = {
+            loan_approval_id: id,
+            status: loanStatus,
+        };
+
+        const request = await fetch("loanrequests/update", {
+            method: "PATCH",
+            headers: {
+                "X-CSRF-TOKEN": accessToken,
+                "CONTENT-TYPE": "application/json",
+                Accept: "application/json",
             },
-            willClose: () => {
-                clearInterval(timerInterval);
-            },
-        }).then((result) => {
-            /* Read more about handling dismissals below */
-            if (
-                result.dismiss === Swal.DismissReason.timer ||
-                result.dismiss === Swal.DismissReason.backdrop ||
-                result.dismiss === Swal.DismissReason.cancel ||
-                result.dismiss === Swal.DismissReason.close ||
-                result.dismiss === Swal.DismissReason.esc
-            ) {
-                requestTable.ajax.reload();
-            }
+            body: JSON.stringify(payload),
         });
+
+        if (request.ok) {
+            let timerInterval;
+            Swal.fire({
+                title: "Status Updated!",
+                html: "<h1>Please wait shortly</h1>",
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                    timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                },
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (
+                    result.dismiss === Swal.DismissReason.timer ||
+                    result.dismiss === Swal.DismissReason.backdrop ||
+                    result.dismiss === Swal.DismissReason.cancel ||
+                    result.dismiss === Swal.DismissReason.close ||
+                    result.dismiss === Swal.DismissReason.esc
+                ) {
+                    requestTable.ajax.reload();
+                }
+            });
+        }
     }
 }

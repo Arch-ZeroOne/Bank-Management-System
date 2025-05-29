@@ -56,7 +56,7 @@
                 </select>
             </div>
 
-            <div class="flex flex-col items-center">    
+            <div class="flex flex-col items-center">
                 <label for="customer" class="font-bold text-lg">
                     Customer ID:
                 </label>

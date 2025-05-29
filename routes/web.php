@@ -47,7 +47,7 @@ use Illuminate\Support\Facades\Route;
     Route::controller(LoanRequestController::class)->name('loanrequests')->prefix('loanrequests')->group(function () {
     Route::get('/', 'index');
     Route::get("/getAll", 'list')->name(".list");
-
+    Route::get("/{id}", 'userInfo') -> name(".info");
     Route::patch("/update", 'updateStatus')->name(".update");
     });
 
@@ -55,6 +55,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/', 'index');
     Route::get("/list", 'list')->name('.list');
     Route::patch("/update", 'update')->name(".update");
+    Route::get('/{id}','userInfo') -> name(".info");
     });
 
     Route::controller(TransactionsController::class)->name("transactions")->prefix("transactions")->group(function () {

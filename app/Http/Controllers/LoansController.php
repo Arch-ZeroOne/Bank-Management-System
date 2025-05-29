@@ -8,27 +8,34 @@ use Yajra\DataTables\DataTables;
 
 class LoansController extends Controller
 {
- public function index()
- {
+    public function index()
+    {
 
-  return view('users.loans');
- }
+    return view('users.loans');
+    }
 
- public function list()
- {
+    public function list()
+    {
 
-  $query = DB::table('loans')->select();
+    $query = DB::table('loans')->select();
 
-  return DataTables::of($query)->make(true);
- }
+    return DataTables::of($query)->make(true);
+    }
 
- public function update(LoanRequest $request)
- {
-  $validated = $request->validated();
+    public function update(LoanRequest $request)
+    {
+    $validated = $request->validated();
 
-  DB::table("loans")->where('loan_id', $validated['id'])->update([
-   'status' => $validated['status'],
-  ]);
+    DB::table("loans")->where('loan_id', $validated['id'])->update([
+    'status' => $validated['status'],
+    ]);
 
- }
+    }
+
+    public function userInfo(String $id){
+        $query = DB::table('loans') -> where('loan_id',$id) -> get(); 
+
+        return response() -> json($query);
+    }
+
 }

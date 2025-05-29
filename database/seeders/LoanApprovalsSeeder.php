@@ -29,5 +29,5 @@ class LoanApprovalsSeeder extends Seeder
             ]);
 
     } 
-  }
+}
 }

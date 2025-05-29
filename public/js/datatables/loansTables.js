@@ -2,7 +2,7 @@ function baseUrl() {
     //Equivalent to since we are in localhost : http://127.0.0.1:8000/
     return location.protocol + "//" + location.host + "";
 }
-
+const loansLoader = document.getElementById("loader");
 let loansTable = new DataTable("#loansTable", {
     //our route where we request our data's
 
@@ -46,7 +46,14 @@ let loansTable = new DataTable("#loansTable", {
         {
             data: "status",
             name: "status",
-            title: "status",
+            render: function (data) {
+                if (data === "Paid") {
+                    return `<span class="text-green-600 font-bold">${data}</span>`;
+                } else if (data === "Unpaid") {
+                    return `<span class="text-red-600 font-bold">${data}</span>`;
+                }
+            },
+            title: "Status",
         },
         {
             data: "customer_id",
@@ -59,9 +66,9 @@ let loansTable = new DataTable("#loansTable", {
             data: "loan_id",
             render: function (data) {
                 return `
-                <div class="flex justify-center gap-2  p-2 items-center w-full" id="toggle" >
-                <img class="edit-btn cursor-pointer h-20"  id="paid" title="Mark Paid" data-paid="${data}" src="../../images/paid.png" style="height:35px;"> 
-                <img class="edit-btn cursor-pointer h-20"  id="unpaid" title="Mark Unpaid" data-unpaid="${data}" src="../../images/unpaid.png" style="height:35px;"> 
+                <div class="flex justify-center gap-4  p-2 items-center w-full" id="toggle" >
+                <i class="fa-solid fa-user-check edit-btn cursor-pointer text-lg" id="paid" title="Mark Paid" data-paid="${data}"></i>
+                <i class="fa-solid fa-user-xmark edit-btn cursor-pointer text-lg" id="unpaid" title="Mark Unpaid" data-unpaid="${data}"></i>
                 </div>`;
             },
         },
@@ -77,10 +84,11 @@ document.getElementById("loansTable").addEventListener("click", (e) => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Decline",
+            confirmButtonText: "Confirm",
             cancelButtonText: "Cancel",
         }).then((result) => {
             if (result.isConfirmed) {
+                showLoader();
                 toggleStatus(true, e.target.dataset.paid);
             }
         });
@@ -93,27 +101,26 @@ document.getElementById("loansTable").addEventListener("click", (e) => {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Confirm",
-            cancelButtonText: "Decline",
+            cancelButtonText: "Cancel",
         }).then((result) => {
             if (result.isConfirmed) {
+                showLoader();
                 toggleStatus(false, e.target.dataset.unpaid);
             }
         });
     }
 });
 
-function toggleStatus(status, id) {
+async function toggleStatus(status, id) {
     const loan_status = status ? "Paid" : "Unpaid";
     const token = document.querySelector(`input[name="_token"`).value;
-
-    console.log(token);
 
     const payload = {
         id: id,
         status: loan_status,
     };
 
-    fetch("loans/update", {
+    const request = await fetch("loans/update", {
         method: "PATCH",
         headers: {
             "X-CSRF-TOKEN": token,
@@ -121,39 +128,44 @@ function toggleStatus(status, id) {
             Accept: "application/json",
         },
         body: JSON.stringify(payload),
-    })
-        .then(() => {
-            console.log("Reached");
-            let timerInterval;
-            Swal.fire({
-                title: "Status Updated!",
-                html: "<h1>Please wait shortly</h1>",
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector("b");
-                    timerInterval = setInterval(() => {
-                        timer.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100);
-                },
-                willClose: () => {
-                    clearInterval(timerInterval);
-                },
-            }).then((result) => {
-                /* Read more about handling dismissals below */
-                if (
-                    result.dismiss === Swal.DismissReason.timer ||
-                    result.dismiss === Swal.DismissReason.backdrop ||
-                    result.dismiss === Swal.DismissReason.cancel ||
-                    result.dismiss === Swal.DismissReason.close ||
-                    result.dismiss === Swal.DismissReason.esc
-                ) {
-                    loansTable.ajax.reload();
-                }
-            });
-        })
-        .catch((error) => {
-            console.log(error);
+    });
+
+    if (request.ok) {
+        closeLoader();
+        let timerInterval;
+        Swal.fire({
+            title: "Status Updated!",
+            html: "<h1>Please wait shortly</h1>",
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            },
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (
+                result.dismiss === Swal.DismissReason.timer ||
+                result.dismiss === Swal.DismissReason.backdrop ||
+                result.dismiss === Swal.DismissReason.cancel ||
+                result.dismiss === Swal.DismissReason.close ||
+                result.dismiss === Swal.DismissReason.esc
+            ) {
+                loansTable.ajax.reload();
+            }
         });
+    }
+}
+function showLoader() {
+    loansLoader.classList.remove("invisible");
+}
+
+function closeLoader() {
+    loansLoader.classList.add("invisible");
 }
