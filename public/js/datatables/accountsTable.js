@@ -59,6 +59,16 @@ let accountsTable = new DataTable("#myTable", {
         {
             data: "status",
             title: "Status",
+            render: function (data) {
+                if (data === "Active") {
+                    return `<span class="text-green-600 font-bold">${data}</span>`;
+                } else if (data === "Inactive") {
+                    console.log("Data is Inactive");
+                    return `<span class="text-yellow-600 font-bold" style="color:#FDCA40;">${data}</span>`;
+                } else if (data === "Deleted") {
+                    return `<span class="text-red-600 font-bold">${data}</span>`;
+                }
+            },
         },
         {
             data: "customer_id",
@@ -73,7 +83,6 @@ let accountsTable = new DataTable("#myTable", {
                 <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:15px;">
                 <img class="edit-btn cursor-pointer h-20"  name="Edit"   data-id="${data}" id="edit"  title="Edit Details" src="../../images/edit-user.png" style="height:40px;"> 
                 <img class="cursor-pointer h-20"  name="Delete" id="delete" data-delete="${data}" title="Delete User" src="../../images/delete-user.png" style="height:40px;">
-
 
                 </div>`;
             },
@@ -109,6 +118,7 @@ addBtn.addEventListener("click", () => {
     }).then((result) => {
         if (result.isConfirmed) {
             sendAddRequest();
+            closeModal();
         }
     });
 });
@@ -118,6 +128,7 @@ addNewBtn.addEventListener("click", () => {
 
 function handleFormValue(id) {
     showLoader();
+    3;
     fetch(`user/${id}`)
         .then((response) => {
             return response.json();
@@ -224,7 +235,6 @@ async function sendUpdateRequest(payload, token, accId) {
                     result.dismiss === Swal.DismissReason.esc
                 ) {
                     accountsTable.ajax.reload();
-                    closeModal();
                 }
             });
         }
@@ -233,7 +243,10 @@ async function sendUpdateRequest(payload, token, accId) {
     }
 }
 
+//Currently Working in this function when an account is already deleted
 function showDeleteModal(id, token) {
+    let data = null,
+        deleted = false;
     Swal.fire({
         title: "Wanna delete account?",
         text: "You won't be able to revert this!",
@@ -243,18 +256,45 @@ function showDeleteModal(id, token) {
         cancelButtonColor: "#d33",
         confirmButtonText: "Confirm",
     }).then((result) => {
-        if (result.isConfirmed) {
-            sendDeleteRequest(id, token);
-        }
+        const request = fetch(`user/${id}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if (data[0].status === "Deleted") {
+                    Swal.fire({
+                        title: "Account already deleted",
+                        icon: "error",
+                        text: "Please delete other accounts",
+                    }).then((response) => {
+                        if (response.isConfirmed) {
+                            deleted = true;
+                        }
+                        console.log(deleted);
+                        console.log(result.isConfirmed);
+                        if (result.isConfirmed && !deleted) {
+                            sendDeleteRequest(id, token);
+                        }
+                    });
+                }
+            });
     });
 }
 
 async function sendDeleteRequest(id, token) {
-    const request = await fetch(`user/${id}`, {
-        method: "DELETE",
+    const payload = {
+        id: id,
+        status: "Deleted",
+    };
+
+    const request = await fetch(`user/delete`, {
+        method: "PATCH",
         headers: {
+            "Content-Type": "application/json",
             "X-CSRF-TOKEN": token,
+            Accept: "application/json",
         },
+        body: JSON.stringify(payload),
     });
 
     if (request.ok) {
@@ -358,7 +398,6 @@ async function sendAddRequest() {
                     document.getElementById("initial-balance").value = "0";
                     document.getElementById("customer-id").value = "";
                     document.getElementById("acc-plans").value = "Savings";
-
                     accountsTable.ajax.reload();
                 }
             });

@@ -8,4 +8,5 @@ div.dt-container select.dt-input {
 #loansTable_wrapper,
 #transactionTable_wrapper {
     width: 100%;
+    cursor: pointer;
 }
