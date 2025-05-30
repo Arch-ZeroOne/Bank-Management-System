@@ -4,6 +4,7 @@
             {{ __('Loan Requests') }}
         </h2>
     </x-slot>
+    <x-header location="Loan Requests" />
     <div class="flex justify-center w-full">
         <table class="" id="requestTable" class="display text-white w-full">
 

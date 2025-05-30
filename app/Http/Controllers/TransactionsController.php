@@ -7,16 +7,27 @@ use Yajra\DataTables\DataTables;
 
 class TransactionsController extends Controller
 {
- public function index()
- {
+  public function index()
+  {
 
-  return view('users.transactions');
+    return view('users.transactions');
 
- }
+  }
 
- public function list()
- {
-  $data = DB::table("transactions")->select();
-   return DataTables::of($data) -> make(true);  
- }
-}
+  public function list()
+  {
+    $data = DB::table("transactions")->select();
+    return DataTables::of($data) -> make(true);  
+  }
+  public function insert(){
+
+  }
+
+  public function update(){
+
+  }
+
+  public function delete(){
+    
+  }
+  }

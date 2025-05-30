@@ -7,6 +7,8 @@ use App\Http\Controllers\LoansController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\BranchesController;
+use App\Http\Controllers\EmployeesController;
 use Illuminate\Support\Facades\Route;
 
     Route::get('/', function () {
@@ -60,7 +62,19 @@ use Illuminate\Support\Facades\Route;
 
     Route::controller(TransactionsController::class)->name("transactions")->prefix("transactions")->group(function () {
     Route::get('/', 'index');
-    Route::get("/list", 'list')->name('.list');
+    Route::get("/list", 'list')->name('list');
+    Route::patch("/update", 'update') -> name('update');
     });
+
+    Route::controller(BranchesController::class) -> name ('branches') -> prefix("branches") -> group(function(){
+      Route::get('/','index');
+      Route::get('/list','list') -> name('list');
+    });
+    
+    Route::controller(EmployeesController::class) -> name('employees') -> prefix('employees') -> group(function(){
+      Route::get("/",'index');
+      Route::get('/list','list') -> name('list');
+    });
+
 
 require __DIR__ . '/auth.php';

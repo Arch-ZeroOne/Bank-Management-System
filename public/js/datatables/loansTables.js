@@ -114,52 +114,79 @@ document.getElementById("loansTable").addEventListener("click", (e) => {
 async function toggleStatus(status, id) {
     const loan_status = status ? "Paid" : "Unpaid";
     const token = document.querySelector(`input[name="_token"`).value;
+    let proceed = true;
 
-    const payload = {
-        id: id,
-        status: loan_status,
-    };
+    const getOldDetails = await fetch(`loans/${id}`);
 
-    const request = await fetch("loans/update", {
-        method: "PATCH",
-        headers: {
-            "X-CSRF-TOKEN": token,
-            "CONTENT-TYPE": "application/json",
-            Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
-    });
-
-    if (request.ok) {
+    if (getOldDetails.ok) {
+        const data = await getOldDetails.json();
+        const status = data[0].status;
         closeLoader();
-        let timerInterval;
-        Swal.fire({
-            title: "Status Updated!",
-            html: "<h1>Please wait shortly</h1>",
-            timer: 2000,
-            timerProgressBar: true,
-            didOpen: () => {
-                Swal.showLoading();
-                const timer = Swal.getPopup().querySelector("b");
-                timerInterval = setInterval(() => {
-                    timer.textContent = `${Swal.getTimerLeft()}`;
-                }, 100);
+
+        if (status === "Paid" && loan_status === "Paid") {
+            Swal.fire({
+                title: "Account already marked Paid",
+                icon: "error",
+                text: "Account status is already paid please take another action",
+            });
+            proceed = false;
+        } else if (status === "Unpaid" && loan_status === "Unpaid") {
+            Swal.fire({
+                title: "Account already marked Unpaid",
+                icon: "error",
+                text: "Account status is already Unpaid please take another action",
+            });
+            proceed = false;
+        }
+    }
+
+    if (proceed) {
+        const payload = {
+            id: id,
+            status: loan_status,
+        };
+
+        const request = await fetch("loans/update", {
+            method: "PATCH",
+            headers: {
+                "X-CSRF-TOKEN": token,
+                "CONTENT-TYPE": "application/json",
+                Accept: "application/json",
             },
-            willClose: () => {
-                clearInterval(timerInterval);
-            },
-        }).then((result) => {
-            /* Read more about handling dismissals below */
-            if (
-                result.dismiss === Swal.DismissReason.timer ||
-                result.dismiss === Swal.DismissReason.backdrop ||
-                result.dismiss === Swal.DismissReason.cancel ||
-                result.dismiss === Swal.DismissReason.close ||
-                result.dismiss === Swal.DismissReason.esc
-            ) {
-                loansTable.ajax.reload();
-            }
+            body: JSON.stringify(payload),
         });
+
+        if (request.ok) {
+            closeLoader();
+            let timerInterval;
+            Swal.fire({
+                title: "Status Updated!",
+                html: "<h1>Please wait shortly</h1>",
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                    timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                },
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (
+                    result.dismiss === Swal.DismissReason.timer ||
+                    result.dismiss === Swal.DismissReason.backdrop ||
+                    result.dismiss === Swal.DismissReason.cancel ||
+                    result.dismiss === Swal.DismissReason.close ||
+                    result.dismiss === Swal.DismissReason.esc
+                ) {
+                    loansTable.ajax.reload();
+                }
+            });
+        }
     }
 }
 function showLoader() {

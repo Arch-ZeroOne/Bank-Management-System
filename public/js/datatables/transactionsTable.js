@@ -26,6 +26,15 @@ let transactionTable = new DataTable("#transactionTable", {
         {
             data: "transaction_type",
             name: "transaction_type",
+            render: function (data) {
+                if (data === "Transfer") {
+                    return `<span class="font-bold" style="color:#6BA259">${data}</span>`;
+                } else if (data === "Deposit") {
+                    return `<span class=" font-bold" style="color:#F7F39A">${data}</span>`;
+                } else if (data === "Withdrawal") {
+                    return `<span class="font-bold"  style="color:#38817A">${data}</span>`;
+                }
+            },
             title: "Transaction Type",
         },
         {
@@ -49,9 +58,10 @@ let transactionTable = new DataTable("#transactionTable", {
             data: "loan_approval_id",
             render: function (data) {
                 return `
-                <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:10px; ">
-                    <img class="edit-btn cursor-pointer h-20"  id="approve" title="Approve Request" data-approve="${data}" src="../../images/update.png" style="height:40px;"> 
-                    <img class="edit-btn cursor-pointer h-20"  id="decline" title="Decline Request"data-decline="${data}" src="../../images/delete.png" style="height:40px;"> 
+                <div class="flex justify-center gap-6 p-2 items-center w-full"     >
+                <i class="fa-solid fa-marker  text-lg"></i>
+                <i class="fa-solid fa-trash text-lg"></i>
+    
 
                 </div>`;
             },

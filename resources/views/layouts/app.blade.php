@@ -133,6 +133,8 @@
     <script src="js/datatables/requestTable.js"></script>
     <script src="js/dataTables/loansTables.js"></script>
     <script src="js/dataTables/transactionsTable.js"></script>
+    <script src="js/dataTables/branchesTable.js"></script>
+    <script src="js/dataTables/employeesTable.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/chart.js"></script>
 

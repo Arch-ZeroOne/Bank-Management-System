@@ -4,6 +4,7 @@
             {{ __('Transactions') }}
         </h2>
     </x-slot>
+    <x-header location="Transactions" />
     <div class="flex justify-center w-full">
         <table class="" id="transactionTable" class="display text-white w-full">
 

@@ -8,12 +8,12 @@ use Yajra\DataTables\DataTables;
 
 class LoanRequestController extends Controller
 {
- public function index()
- {
+    public function index()
+    {
 
-  return view('users.loanrequests');
+        return view('users.loanrequests');
 
- }
+    }
     public function list()
     {
         $query = DB::table('loan_approvals')->select();
