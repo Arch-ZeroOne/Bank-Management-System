@@ -39,7 +39,8 @@ class AccountsController extends Controller
 
   public function update(UpdateUserRequest $request)
   {
-  $form_infos = $request->validated();
+
+    $form_infos = $request->validated();
     DB::table('accounts')
     ->where('account_id', $form_infos['id'])
     ->update(

@@ -37,18 +37,8 @@
                             {{ __('Loans') }}
                         </x-nav-link>
                     </div>
-                    <div class="  sm:-my-px sm:ms-10 sm:flex flex items-center gap-1" style="margin-left: 0">
-                        <i class="fa-solid fa-bars-staggered"></i>
-                        <x-nav-link :href="route('transactions')" :active="request()->routeIs('transactions')">
-                            {{ __('Transactions') }}
-                        </x-nav-link>
-                    </div>
-                    <div class="  sm:-my-px sm:ms-10 sm:flex flex items-center gap-1" style="margin-left: 0">
-                        <i class="fa-solid fa-building-columns"></i>
-                        <x-nav-link :href="route('branches')" :active="request()->routeIs('branches')">
-                            {{ __('Branches') }}
-                        </x-nav-link>
-                    </div>
+
+
                     <div class="  sm:-my-px sm:ms-10 sm:flex flex items-center gap-1" style="margin-left: 0">
                         <i class="fa-solid fa-user-tie"></i>
                         <x-nav-link :href="route('employees')" :active="request()->routeIs('employees')">

@@ -16,8 +16,10 @@ class EmployeesSeeder extends Seeder
     {
         $faker = Factory::create();
         $positions = ['Bank Teller','Customer Service','Personal Banker','Loan Officer'];
+        $count = 0;
 
         for($i = 0; $i <= 1000; $i++){
+            $count++;
             $rand_position = rand(0,3);
             DB::table("employees") -> insert([
                 'first_name' => $faker -> firstName(),
@@ -26,7 +28,7 @@ class EmployeesSeeder extends Seeder
                 'phone_number' => $faker -> phoneNumber(),
                 'position' => $positions[$rand_position],
                 'hire_date' => $faker -> date(),
-                'branch_id' =>  $faker -> randomNumber(5,false),
+                'branch_id' => $count,
             ]);
 
         }

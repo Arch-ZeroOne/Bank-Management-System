@@ -1,10 +1,13 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Loan Requests') }}
-        </h2>
-    </x-slot>
+
     <x-header location="Loan Requests" />
+    <div class="flex justify-end">
+
+        <x-buttons.addnewrequest />
+
+
+
+    </div>
     <div class="flex justify-center w-full">
         <table class="" id="requestTable" class="display text-white w-full">
 

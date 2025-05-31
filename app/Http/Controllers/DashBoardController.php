@@ -11,8 +11,33 @@ class DashBoardController extends Controller
       $accounts    = DB::table('accounts')->count();
       $customer    = DB::table('customer')->count();
       $transaction = DB::table('transactions')->count();
+      $balance = DB::table('accounts') -> select(DB::raw('SUM(balance) as total')) -> value('total');
+      $customer_ranking = DB::table("accounts")-> orderBy('balance') -> limit(10) -> get();
+      $id = [];
 
-      return response()->json(['accounts' => $accounts, 'customer' => $customer, "transaction" => $transaction]);
+      foreach($customer_ranking as $key => $value){
+          $id[] =$value -> customer_id;
+
+      }
+
+      $customer_info = DB::table('accounts') -> join('customer','accounts.customer_id','=','customer.customer_id') -> get() ->whereIn('customer_id',
+      [$id[0],$id[1],$id[2],$id[3],$id[4],$id[5],$id[6],$id[7],$id[8],$id[9]] );
+
+
+
+      return response()->json(['accounts' => $accounts, 
+                                    'customer' => $customer, 
+                                    "transaction" => $transaction, 
+                                    "balance" => $balance,
+                                    'customer_ranking' => $customer_ranking,
+                                    "customer_info" => $customer_info,]
+                                );
+    } 
+
+
+    public function getAccountInfo(){
+
+
     }
 
   public function getTypeCount()

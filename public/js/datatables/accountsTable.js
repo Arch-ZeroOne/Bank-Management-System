@@ -64,8 +64,6 @@ let accountsTable = new DataTable("#myTable", {
                     return `<span class="text-green-600 font-bold">${data}</span>`;
                 } else if (data === "Inactive") {
                     return `<span class="text-yellow-600 font-bold" style="color:#FDCA40;">${data}</span>`;
-                } else if (data === "Deleted") {
-                    return `<span class="text-red-600 font-bold">${data}</span>`;
                 }
             },
         },
@@ -89,7 +87,6 @@ let accountsTable = new DataTable("#myTable", {
         },
     ],
 });
-
 document.getElementById("myTable").addEventListener("click", (e) => {
     const update_id = e.target.dataset.id;
     const delete_id = e.target.dataset.delete;
@@ -101,12 +98,16 @@ document.getElementById("myTable").addEventListener("click", (e) => {
         showDeleteModal(delete_id, token);
     }
 });
+
 closeAddModal.forEach((btn) => {
     btn.addEventListener("click", () => {
-        updateModal.style.top = "-900px";
-        addNewModal.style.top = "-900px";
+        closeAddAccountModal();
+        closeUpdateAccountModal();
     });
 });
+
+addNewBtn.addEventListener("click", showAddAccountModal);
+
 addBtn.addEventListener("click", () => {
     Swal.fire({
         title: "Confirm?",
@@ -119,57 +120,31 @@ addBtn.addEventListener("click", () => {
     }).then((result) => {
         if (result.isConfirmed) {
             sendAddRequest();
-            closeModal();
+            closeAddAccountModal();
         }
     });
-});
-addNewBtn.addEventListener("click", () => {
-    showAddModal();
 });
 
 async function handleFormValue(id) {
     showLoader();
 
-    let deleted = false;
-    const getData = await fetch(`user/${id}`);
-
-    if (getData.ok) {
+    const request = await fetch(`user/${id}`);
+    if (request.ok) {
         closeLoader();
-        const data = await getData.json();
-        const status = data[0].status;
-        console.log(status);
+        showUpdateAccountModal();
+        const data = await request.json();
 
-        if (status === "Deleted") {
-            deleted = true;
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "User account  been deleted",
-            });
-        }
-    }
-
-    if (!deleted) {
-        const request = await fetch(`user/${id}`);
-        if (request.ok) {
-            closeLoader();
-            showModal();
-            const data = await request.json();
-
-            console.log(data);
-            //Sets the value of the form from the data queried in the db
-            document.getElementById("id").value = data[0].account_id;
-            document.getElementById("number").value = Number(
-                data[0].account_number
-            );
-            document.getElementById("plan").value = data[0].account_type;
-            document.getElementById("status").value = data[0].status;
-            document.getElementById("balance").value = Number(data[0].balance);
-            document.getElementById("date").value = data[0].opened_date;
-            document.getElementById("customer").value = Number(
-                data[0].customer_id
-            );
-        }
+        console.log(data);
+        //Sets the value of the form from the data queried in the db
+        document.getElementById("id").value = data[0].account_id;
+        document.getElementById("number").value = Number(
+            data[0].account_number
+        );
+        document.getElementById("plan").value = data[0].account_type;
+        document.getElementById("status").value = data[0].status;
+        document.getElementById("balance").value = Number(data[0].balance);
+        document.getElementById("date").value = data[0].opened_date;
+        document.getElementById("customer").value = Number(data[0].customer_id);
     }
 }
 
@@ -211,6 +186,8 @@ function showConfirmation() {
                 customer_id: Number(customer),
             };
 
+            console.log(payload);
+
             sendUpdateRequest(payload, token, accId);
         }
     });
@@ -219,7 +196,7 @@ function showConfirmation() {
 async function sendUpdateRequest(payload, token, accId) {
     try {
         //AJAX patch operation
-        const request = await fetch(`user/${accId}`, {
+        const request = await fetch(`user/update`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -257,7 +234,7 @@ async function sendUpdateRequest(payload, token, accId) {
                     result.dismiss === Swal.DismissReason.esc
                 ) {
                     accountsTable.ajax.reload();
-                    closeModal();
+                    closeUpdateAccountModal();
                 }
             });
         }
@@ -297,22 +274,21 @@ async function sendDeleteRequest(id, token) {
 
         console.log(status);
 
-        if (status === "Deleted") {
+        if (status === "Inactive") {
             existing = true;
             Swal.fire({
                 icon: "error",
-                title: "Account already deleted",
-                text: "Users account is already deleted",
+                title: "Account already Inactive",
+                text: "Users account is already Inactive",
             });
             closeLoader();
         }
     }
 
     if (!existing) {
-        console.log("Fired");
         const payload = {
             id: id,
-            status: "Deleted",
+            status: "Inactive",
         };
         const request = await fetch(`user/delete`, {
             method: "PATCH",
@@ -364,91 +340,95 @@ async function sendDeleteRequest(id, token) {
             }
         }
     }
+}
 
-    async function sendAddRequest() {
-        const balance = document.getElementById("initial-balance").value;
-        const customer = document.getElementById("customer-id").value;
-        const plan = document.getElementById("acc-plans").value;
-        const token = document.querySelector('input[name="_token"').value;
+async function sendAddRequest() {
+    const balance = document.getElementById("initial-balance").value;
+    const customer = document.getElementById("customer-id").value;
+    const plan = document.getElementById("acc-plans").value;
+    const token = document.querySelector('input[name="_token"').value;
 
-        showLoader();
+    showLoader();
 
-        const payload = {
-            account_type: plan,
-            balance: balance,
-            customer_id: customer,
-        };
+    const payload = {
+        account_type: plan,
+        balance: balance,
+        customer_id: customer,
+    };
 
-        try {
-            const request = await fetch("user/store", {
-                method: "POST",
-                headers: {
-                    "CONTENT-TYPE": "application/json",
-                    "X-CSRF-TOKEN": token,
-                    Accept: "application/json",
-                },
-                body: JSON.stringify(payload),
+    try {
+        const request = await fetch("user/store", {
+            method: "POST",
+            headers: {
+                "CONTENT-TYPE": "application/json",
+                "X-CSRF-TOKEN": token,
+                Accept: "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!request.ok) {
+            closeLoader();
+            const { message } = await request.json();
+            Swal.fire({
+                title: "Unsuccessfull",
+                text: message,
+                icon: "error",
             });
-
-            if (!request.ok) {
-                closeLoader();
-                const { message } = await request.json();
-                Swal.fire({
-                    title: "Unsuccessfull",
-                    text: message,
-                    icon: "error",
-                });
-            }
-
-            if (request.ok) {
-                closeLoader();
-                Swal.fire({
-                    title: "User has been added Successfully!",
-                    html: "<h1>Please wait shortly</h1>",
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading();
-                        const timer = Swal.getPopup().querySelector("b");
-                        timerInterval = setInterval(() => {
-                            timer.textContent = `${Swal.getTimerLeft()}`;
-                        }, 100);
-                    },
-                    willClose: () => {
-                        clearInterval(timerInterval);
-                    },
-                }).then((result) => {
-                    /* Read more about handling dismissals below */
-                    if (
-                        result.dismiss === Swal.DismissReason.timer ||
-                        result.dismiss === Swal.DismissReason.backdrop ||
-                        result.dismiss === Swal.DismissReason.cancel ||
-                        result.dismiss === Swal.DismissReason.close ||
-                        result.dismiss === Swal.DismissReason.esc
-                    ) {
-                        document.getElementById("initial-balance").value = "0";
-                        document.getElementById("customer-id").value = "";
-                        document.getElementById("acc-plans").value = "Savings";
-                        accountsTable.ajax.reload();
-                    }
-                });
-            }
-        } catch (error) {
-            console.log("Error");
         }
+
+        if (request.ok) {
+            closeLoader();
+            Swal.fire({
+                title: "User has been added Successfully!",
+                html: "<h1>Please wait shortly</h1>",
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                    timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                },
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (
+                    result.dismiss === Swal.DismissReason.timer ||
+                    result.dismiss === Swal.DismissReason.backdrop ||
+                    result.dismiss === Swal.DismissReason.cancel ||
+                    result.dismiss === Swal.DismissReason.close ||
+                    result.dismiss === Swal.DismissReason.esc
+                ) {
+                    document.getElementById("initial-balance").value = "0";
+                    document.getElementById("customer-id").value = "";
+                    document.getElementById("acc-plans").value = "Savings";
+                    accountsTable.ajax.reload();
+                }
+            });
+        }
+    } catch (error) {
+        console.log("Error");
     }
 }
 
-function showModal() {
-    updateModal.style.top = "0px";
+function showUpdateAccountModal() {
+    updateModal.classList.remove("invisible");
 }
-function showAddModal() {
-    addNewModal.style.top = "0px";
+function showAddAccountModal() {
+    addNewModal.classList.remove("invisible");
+    addNewModal.classList.add("visible");
 }
 
-function closeModal() {
-    updateModal.style.top = "-900px";
-    addNewModal.style.top = "-900px";
+function closeUpdateAccountModal() {
+    updateModal.classList.add("invisible");
+}
+
+function closeAddAccountModal() {
+    addNewModal.classList.remove("invisible");
 }
 function showLoader() {
     loader.classList.remove("invisible");

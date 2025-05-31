@@ -1,10 +1,10 @@
 <!-- was not clickable because there is no z index -->
 
-<div class="w-screen h-screen  fixed bg-[rgb(0,0,0,0.2)] z-50" id="update">
+<div class="w-screen h-screen  fixed bg-[rgb(0,0,0,0.2)] z-50 invisible" id="update">
 
     <div
         class="animate__animated animate__backInDown flex flex-col items-center  shadow-xl w-[70%] rounded-xl top-[100px]  gap-3 p-4 h-md ml-auto mr-auto bg-white text-black relative ">
-        <x-exit />
+        <x-exit class="quit" id="quit" />
         <h1 class="text-xl font-bold ">Update User Form</h1>
         <div class="grid grid-cols-2 items-center w-full gap-3 p-2   " id="add-modal">
 

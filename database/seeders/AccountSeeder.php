@@ -15,11 +15,11 @@ class AccountSeeder extends Seeder
     {
         $faker        = Faker::create();
         $accountTypes = ['Savings', 'Checking', 'Basic'];
-        $status       = ["Active","Inactive", "Deleted"];
+        $status       = ["Active","Inactive"];
 
         for ($i = 0; $i <= 1000; $i++) {
         $random  = rand(0, 2);
-        $random2 = rand(0, 2);
+        $random2 = rand(0, 1);
 
             DB::table('accounts')->insert([
                 'account_number' => $faker->randomNumber(9, true),
@@ -27,7 +27,7 @@ class AccountSeeder extends Seeder
                 'balance' => $faker->randomNumber(8, false),
                 'opened_date' => $faker->dateTime(),
                 'status' => $status[$random2],
-                'customer_id' => $faker->randomNumber(5, false),
+                'customer_id' => $i + 1,
 
             ]);
         }

@@ -1,10 +1,10 @@
 <!-- was not clickable because there is no z index -->
 
-<div class=" w-screen h-screen  fixed bg-[rgb(0,0,0,0.2)] z-50" id="modal">
+<div class=" w-screen h-screen  fixed bg-[rgb(0,0,0,0.2)] z-50 invisible" id="modal">
 
     <div class="flex flex-col items-center  shadow-xl w-[40%] rounded-xl top-[140px]  gap-4 p-4 h-md ml-auto mr-auto bg-white text-black relative "
         id="animated-addform">
-        <x-exit />
+        <x-exit class='quit' id='quit' />
         <label for="acc-plans" class="font-bold text-lg">Choose account type:</label>
         <select id="acc-plans" name="acc-plans" class="w-[80%] text-black border border-black rounded-md p-3">
             <option value="Savings">Savings</option>

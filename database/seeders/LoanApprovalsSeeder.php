@@ -17,15 +17,16 @@ class LoanApprovalsSeeder extends Seeder
     {
         $faker = Factory::create();
         $status = ['Approved','Rejected','Ongoing'];
+        $count = 0;
 
         for ($i = 0; $i <= 1000; $i++) {
+            $count++;
             $select_status = rand(0,2);
             DB::table('loan_approvals') -> insert([
                 'approval_date' => $faker -> dateTime(),
                 'status' => $status[$select_status],
-                'employee_id' => $faker -> randomNumber(5,false), 
+                'employee_id' => $count, 
                 'loan_id' => $faker -> randomNumber(5,false),
-
             ]);
 
     } 

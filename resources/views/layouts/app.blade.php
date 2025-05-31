@@ -18,7 +18,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="./css/modal.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <!-- Winky Rough Font -->
@@ -122,6 +121,8 @@
 
         <x-accounts.accformmodal />
         <x-accounts.updateformmodal />
+        <x-modals.addrequestmodal />
+        <x-modals.editrequestmodal />
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/14.0.0/material-components-web.min.js">
@@ -137,6 +138,8 @@
     <script src="js/dataTables/employeesTable.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/chart.js"></script>
+
+
 
 
 </body>

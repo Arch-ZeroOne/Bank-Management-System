@@ -24,9 +24,9 @@ use Illuminate\Support\Facades\Route;
     Route::controller(AccountsController::class)->name("user")->prefix("user")->group(function () {
     Route::view('/', 'users.allusers');
     Route::post('/store', 'store')->name('.store');
-    Route::patch("/delete", 'destroy')->name(".destroy");
-    Route::patch("/{id}", "update")->name(".update");
-    Route::get("/{id}", "getInfo")->name(".getInfo");
+    Route::patch("/delete", 'destroy')->name("destroy");
+    Route::patch("/update", "update")->name("update");
+    Route::get("/{id}", "getInfo")->name("getInfo");
 
     });
 
@@ -50,7 +50,10 @@ use Illuminate\Support\Facades\Route;
     Route::get('/', 'index');
     Route::get("/getAll", 'list')->name(".list");
     Route::get("/{id}", 'userInfo') -> name(".info");
+    Route::post("/insert", 'insert') -> name('insert');
     Route::patch("/update", 'updateStatus')->name(".update");
+    Route::patch("/edit",'updateDetails') -> name(".edit");
+    Route::get("/{id}",'getInfo') -> name('getInfo');
     });
 
     Route::controller(LoansController::class)->name('loans')->prefix('loans')->group(function () {
@@ -60,16 +63,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/{id}','userInfo') -> name(".info");
     });
 
-    Route::controller(TransactionsController::class)->name("transactions")->prefix("transactions")->group(function () {
-    Route::get('/', 'index');
-    Route::get("/list", 'list')->name('list');
-    Route::patch("/update", 'update') -> name('update');
-    });
-
-    Route::controller(BranchesController::class) -> name ('branches') -> prefix("branches") -> group(function(){
-      Route::get('/','index');
-      Route::get('/list','list') -> name('list');
-    });
+    
     
     Route::controller(EmployeesController::class) -> name('employees') -> prefix('employees') -> group(function(){
       Route::get("/",'index');
