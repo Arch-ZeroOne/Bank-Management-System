@@ -16,6 +16,7 @@ class EmployeesSeeder extends Seeder
     {
         $faker = Factory::create();
         $positions = ['Bank Teller','Customer Service','Personal Banker','Loan Officer'];
+       
         $count = 0;
 
         for($i = 0; $i <= 1000; $i++){
@@ -29,6 +30,7 @@ class EmployeesSeeder extends Seeder
                 'position' => $positions[$rand_position],
                 'hire_date' => $faker -> date(),
                 'branch_id' => $count,
+                "status" => 'Active',
             ]);
 
         }

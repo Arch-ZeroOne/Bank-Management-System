@@ -2,7 +2,7 @@
 
     <div class="flex flex-col items-center  shadow-xl w-[40%] rounded-xl top-[140px]  gap-4 p-4 h-md ml-auto mr-auto bg-white text-black relative "
         id="animated-addform">
-        <x-exit id="quitRequest" class="quitRequest" />
+        <x-exit id="exit-request" class="exit-request" />
 
         <label for="request-date" class="font-bold text-lg">Request Date:</label>
         <input type="date" class="w-[80%]  text-black  border-black rounded-md p-3 " id="request-date"

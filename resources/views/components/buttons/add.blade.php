@@ -1,5 +1,5 @@
 <!-- From Uiverse.io by catraco -->
-<button title="Add New Request" id="addRequest"
+<button title="{{ $title }}" id="{{ $id }}"
     class="group cursor-pointer outline-none hover:rotate-90 duration-300 self-end mr-20">
     <svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"
         class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 group-active:stroke-zinc-200 group-active:fill-zinc-600 group-active:duration-0 duration-300">

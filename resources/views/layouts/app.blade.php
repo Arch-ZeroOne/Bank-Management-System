@@ -43,87 +43,110 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/14.0.0/material-components-web.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.material.css">
 
+    <!-- Custom CSS for table overflow handling -->
+    <style>
+        /* Ensure tables don't overflow */
+        .table-container {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        .table-container table {
+            min-width: 100%;
+            width: max-content;
+        }
+
+        /* DataTables responsive handling */
+        .dataTables_wrapper {
+            overflow-x: auto;
+        }
+
+        /* Ensure main content doesn't overflow */
+        .main-content {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Sidebar responsive behavior - adjusted for 25% width */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+
+            /* Hide navigation on mobile - you may want to add a mobile menu */
+            nav {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                z-index: 50;
+            }
+
+            nav.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
 </head>
 
-<body>
-
-
-
-
-    <div class="min-h-screen" style="display:flex; ">
-        <!-- Extends a template -->
+<body class="bg-gray-50">
+    <!-- Modals -->
+    <x-accounts.accformmodal />
+    <x-accounts.updateformmodal />
+    <x-modals.addrequestmodal />
+    <x-modals.editrequestmodal />
+    <x-modals.addnewloans />
+    <x-modals.updateloan />
+    <x-modals.addnewemployeemodal />
+    <x-modals.updatemployee />
+    <div class="min-h-screen flex">
+        <!-- Include the navigation component directly (it handles its own positioning) -->
         @include('layouts.navigation')
-        <!-- Page Content -->
-        <div class="w-full">
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6 mt-2 mb-1 "
-                style="justify-content: end;margin-right:70px;">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150 ">
-                            <div>{{ Auth::user()->name }}</div>
-
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d=" M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4
-    4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+        <!-- Main Content Area - adjusted to work with 25% width sidebar -->
+        <div class="main-content flex-1 flex flex-col" style="margin-left: 25%; width: 75%;">
+            <!-- Top Navigation Bar -->
+            <div class="bg-white shadow-sm border-b border-gray-200">
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center justify-between p-4">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-gray-900 z-50">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    <span class="font-semibold text-gray-800">Sure Bank</span>
+                    <div></div>
+                </div>
 
 
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
 
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
             </div>
-            <main class="">
-                {{ $slot }}
+
+            <!-- Page Content -->
+            <main class="flex-1 p-6 bg-gray-50 overflow-y-auto">
+                <div class="max-w-full">
+                    {{ $slot }}
+                </div>
             </main>
         </div>
+    </div>
 
-
-
-        <!-- From Uiverse.io by devAaus -->
-        <div class="w-full fixed  bg-[rgb(0,0,0,0.2)] h-screen   z-50 flex items-center justify-center invisible "
-            id="loader">
-
-            <div class="flex-col gap-4 w-full flex items-center justify-center">
+    <!-- Loading Spinner -->
+    <div class="fixed inset-0 bg-black bg-opacity-20 z-50 flex items-center justify-center invisible" id="loader">
+        <div class="flex-col gap-4 w-full flex items-center justify-center">
+            <div
+                class="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full">
                 <div
-                    class="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full">
-                    <div
-                        class="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full">
-                    </div>
+                    class="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full">
                 </div>
             </div>
-
         </div>
-
-
-
-        <x-accounts.accformmodal />
-        <x-accounts.updateformmodal />
-        <x-modals.addrequestmodal />
-        <x-modals.editrequestmodal />
     </div>
+
+
+
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/14.0.0/material-components-web.min.js">
     </script>
@@ -133,15 +156,46 @@
     <script src="js/datatables/accountsTable.js"></script>
     <script src="js/datatables/requestTable.js"></script>
     <script src="js/dataTables/loansTables.js"></script>
-    <script src="js/dataTables/transactionsTable.js"></script>
-    <script src="js/dataTables/branchesTable.js"></script>
     <script src="js/dataTables/employeesTable.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/chart.js"></script>
+    <!-- Mobile menu toggle script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.querySelector('nav');
 
+            if (mobileMenuBtn && sidebar) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    sidebar.classList.toggle('open');
+                });
 
+                // Close sidebar when clicking outside on mobile
+                document.addEventListener('click', function(event) {
+                    if (window.innerWidth <= 768) {
+                        if (!sidebar.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                            sidebar.classList.remove('open');
+                        }
+                    }
+                });
+            }
 
-
+            // Initialize DataTables with responsive options
+            if (typeof $ !== 'undefined' && $.fn.DataTable) {
+                $('.datatable').each(function() {
+                    if (!$.fn.DataTable.isDataTable(this)) {
+                        $(this).DataTable({
+                            responsive: true,
+                            scrollX: true,
+                            autoWidth: false,
+                            columnDefs: [{
+                                targets: '_all',
+                                className: 'text-sm'
+                            }]
+                        });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

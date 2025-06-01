@@ -19,6 +19,8 @@ class AccountsController extends Controller
 
   }
 
+
+
   public function store(AddUserRequest $request)
   {
     $faker      = Faker::create();
@@ -33,9 +35,9 @@ class AccountsController extends Controller
     "status" => "Active",
     ]);
 
-  return redirect()->route("user")
-    ->with("message", "User added Successfully");
-  } 
+     return response() -> json(["message" => "User successfully added"], 200);
+
+  }
 
   public function update(UpdateUserRequest $request)
   {
@@ -65,4 +67,9 @@ class AccountsController extends Controller
         ]);
         
       }
-  }
+
+    }
+
+
+
+  

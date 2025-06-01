@@ -15,3 +15,10 @@ div.dt-container select.dt-input {
 .mdc-data-table__cell {
     text-align: center;
 }
+
+#myTable_wrapper label {
+    color: white;
+}
+#myTable_info {
+    color: white;
+}

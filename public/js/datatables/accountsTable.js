@@ -1,114 +1,110 @@
-//let table = new DataTable("#myTable");
+// Clean and unique variable/function names for modal and account table handling
 
-//ColumnDefs - Takes the value that affects the width of the headers in the tables
-//           - Also your customize settings for each header
+// Element Selectors
+const modalUpdateAccount = document.getElementById("update-account");
+const modalAddAccount = document.getElementById("modal");
+const btnOpenAddModal = document.getElementById("add-user");
+const btnSubmitAddAccount = document.getElementById("add");
+const loaderSpinner = document.getElementById("loader");
+const btnCloseModals = document.querySelectorAll("#quit");
 
-//data - column of the table where we get our data
-//name - used for sorting purposes
-//title - header of the column
-
-const updateModal = document.getElementById("update");
-const addBtn = document.getElementById("add-user");
-const addNewModal = document.getElementById("modal");
-const closeAddModal = document.querySelectorAll("#quit");
-const addNewBtn = document.getElementById("add");
-const loader = document.getElementById("loader");
-
-//handling the base url
-function baseUrl() {
-    //Equivalent to since we are in localhost : http://127.0.0.1:8000/
-    return location.protocol + "//" + location.host + "";
+// Utility Function: Base URL
+function getBaseUrl() {
+    return `${location.protocol}//${location.host}`;
 }
 
-let accountsTable = new DataTable("#myTable", {
-    //ajax request for data
-    ajax: baseUrl() + "/table/list",
+// Initialize DataTable
+const accountTable = new DataTable("#myTable", {
+    ajax: `${getBaseUrl()}/table/list`,
     processing: true,
     serverSide: true,
-    columnDefs: [{ targets: "_all", visible: true }],
     stateSave: true,
-
-    //Table columns
+    columnDefs: [{ targets: "_all", visible: true }],
     columns: [
-        {
-            data: "account_id",
-            name: "account_id",
-            title: "Account ID",
-        },
+        { data: "account_id", name: "account_id", title: "Account ID" },
         {
             data: "account_number",
             name: "account_number",
             title: "Account Number",
         },
-        {
-            data: "account_type",
-            name: "account_type",
-            title: "Account Type",
-        },
-        {
-            data: "balance",
-            name: "balance",
-            title: "Balance",
-        },
-        {
-            data: "opened_date",
-            name: "opened_date",
-            title: "Opened Date",
-        },
-        //Adding colors based on the data value
+        { data: "account_type", name: "account_type", title: "Account Type" },
+        { data: "balance", name: "balance", title: "Balance" },
+        { data: "opened_date", name: "opened_date", title: "Opened Date" },
         {
             data: "status",
             title: "Status",
             render: function (data) {
                 if (data === "Active") {
-                    return `<span class="text-green-600 font-bold">${data}</span>`;
+                    return `<span class="bg-green-100 text-green-600 font-bold px-3 py-1 rounded-full text-sm shadow-sm inline-block">${data}</span>`;
                 } else if (data === "Inactive") {
-                    return `<span class="text-yellow-600 font-bold" style="color:#FDCA40;">${data}</span>`;
+                    return `<span class="bg-yellow-100 text-yellow-600 font-bold px-3 py-1 rounded-full text-sm shadow-sm inline-block" style="color:#FDCA40;">${data}</span>`;
+                } else {
+                    return `<span class="bg-gray-100 text-gray-600 font-bold px-3 py-1 rounded-full text-sm shadow-sm inline-block">${data}</span>`;
                 }
             },
         },
-        {
-            data: "customer_id",
-            name: "customer_id",
-            title: "Customer ID",
-        },
-        //adding buttons
+        { data: "customer_id", name: "customer_id", title: "Customer ID" },
         {
             title: "Actions",
             data: "account_id",
-            render: function (data) {
-                return `
-                <div class="flex justify-center gap-10 p-2 items-center w-full" style="gap:20px;">
-                <i class="fa-solid fa-pencil edit-btn cursor-pointer text-lg"  id="edit"  title="Edit Details"  name="Edit"  data-id="${data}"> </i>
-                <i class="fa-solid fa-user-slash cursor-pointer text-lg" name="Delete" id="delete" data-delete="${data}" title="Delete User"> </i>
-
-                </div>`;
-            },
+            render: (id) => `
+                <div class="flex justify-center gap-5 p-2">
+                    <i class="fa-solid fa-pencil edit-btn cursor-pointer text-lg" id="edit" data-id="${id}" title="Edit Details"></i>
+                    <i class="fa-solid fa-user-slash cursor-pointer text-lg" id="delete" data-delete="${id}" title="Delete User"></i>
+                </div>`,
         },
     ],
 });
+
+// Handle Action Clicks (Edit/Delete)
 document.getElementById("myTable").addEventListener("click", (e) => {
-    const update_id = e.target.dataset.id;
-    const delete_id = e.target.dataset.delete;
-
-    if (e.target.id === "edit") {
-        handleFormValue(update_id);
-    } else if (e.target.id === "delete") {
-        const token = document.querySelector('input[name="_token"').value;
-        showDeleteModal(delete_id, token);
-    }
+    const { id, delete: deleteId } = e.target.dataset;
+    if (e.target.id === "edit") loadAccountForEdit(id);
+    if (e.target.id === "delete") confirmDeleteAccount(deleteId);
 });
 
-closeAddModal.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        closeAddAccountModal();
-        closeUpdateAccountModal();
-    });
+// Modal Open/Close Events
+btnCloseModals.forEach((btn) => btn.addEventListener("click", closeAllModals));
+btnSubmitAddAccount.addEventListener("click", openAddAccountModal);
+btnOpenAddModal.addEventListener("click", confirmAddAccount);
+
+document.querySelectorAll("#update-user").forEach((btn) => {
+    btn.addEventListener("click", confirmUpdateAccount);
 });
 
-addNewBtn.addEventListener("click", showAddAccountModal);
+// Modal Controls
+function openUpdateAccountModal() {
+    modalUpdateAccount.classList.replace("invisible", "visible");
+}
 
-addBtn.addEventListener("click", () => {
+function closeUpdateAccountModal() {
+    modalUpdateAccount.classList.replace("visible", "invisible");
+}
+
+function openAddAccountModal() {
+    modalAddAccount.classList.replace("invisible", "visible");
+}
+
+function closeAddAccountModal() {
+    modalAddAccount.classList.replace("visible", "invisible");
+}
+
+function closeAllModals() {
+    closeAddAccountModal();
+    closeUpdateAccountModal();
+}
+
+// Loader Controls
+function showLoader() {
+    loaderSpinner.classList.remove("invisible");
+}
+
+function hideLoader() {
+    loaderSpinner.classList.add("invisible");
+}
+
+// Confirmations
+function confirmAddAccount() {
     Swal.fire({
         title: "Confirm?",
         text: "You won't be able to revert this!",
@@ -119,42 +115,13 @@ addBtn.addEventListener("click", () => {
         confirmButtonText: "Add user",
     }).then((result) => {
         if (result.isConfirmed) {
-            sendAddRequest();
+            submitAddAccount();
             closeAddAccountModal();
         }
     });
-});
-
-async function handleFormValue(id) {
-    showLoader();
-
-    const request = await fetch(`user/${id}`);
-    if (request.ok) {
-        closeLoader();
-        showUpdateAccountModal();
-        const data = await request.json();
-
-        console.log(data);
-        //Sets the value of the form from the data queried in the db
-        document.getElementById("id").value = data[0].account_id;
-        document.getElementById("number").value = Number(
-            data[0].account_number
-        );
-        document.getElementById("plan").value = data[0].account_type;
-        document.getElementById("status").value = data[0].status;
-        document.getElementById("balance").value = Number(data[0].balance);
-        document.getElementById("date").value = data[0].opened_date;
-        document.getElementById("customer").value = Number(data[0].customer_id);
-    }
 }
 
-document.querySelectorAll("#update-user").forEach((btn) => {
-    btn.addEventListener("click", () => {
-        showConfirmation();
-    });
-});
-
-function showConfirmation() {
+function confirmUpdateAccount() {
     Swal.fire({
         title: "Confirm?",
         text: "You won't be able to revert this!",
@@ -164,276 +131,123 @@ function showConfirmation() {
         cancelButtonColor: "#d33",
         confirmButtonText: "Update user",
     }).then((result) => {
-        if (result.isConfirmed) {
-            //Gets the current form value
-            const accId = document.getElementById("id").value;
-            const accNum = document.getElementById("number").value;
-            const balance = document.getElementById("balance").value;
-            const opDate = document.getElementById("date").value;
-            const customer = document.getElementById("customer").value;
-            const plan = document.getElementById("plan").value;
-            const status = document.getElementById("status").value;
-            const token = document.querySelector('input[name="_token"').value;
-
-            //Payload to be passed in laravel
-            const payload = {
-                id: Number(accId),
-                number: Number(accNum),
-                plan: plan,
-                balance: Number(balance),
-                date: opDate,
-                status: status,
-                customer_id: Number(customer),
-            };
-
-            console.log(payload);
-
-            sendUpdateRequest(payload, token, accId);
-        }
+        if (result.isConfirmed) submitUpdateAccount();
     });
 }
 
-async function sendUpdateRequest(payload, token, accId) {
-    try {
-        //AJAX patch operation
-        const request = await fetch(`user/update`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": token,
-                Accept: "application/json",
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (request.ok) {
-            // base route :  "http://127.0.0.1:8000/user";
-            let timerInterval;
-            Swal.fire({
-                title: "User updated!",
-                html: "<h1>Please wait shortly</h1>",
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector("b");
-                    timerInterval = setInterval(() => {
-                        timer.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100);
-                },
-                willClose: () => {
-                    clearInterval(timerInterval);
-                },
-            }).then((result) => {
-                /* Read more about handling dismissals below */
-                if (
-                    result.dismiss === Swal.DismissReason.timer ||
-                    result.dismiss === Swal.DismissReason.backdrop ||
-                    result.dismiss === Swal.DismissReason.cancel ||
-                    result.dismiss === Swal.DismissReason.close ||
-                    result.dismiss === Swal.DismissReason.esc
-                ) {
-                    accountsTable.ajax.reload();
-                    closeUpdateAccountModal();
-                }
-            });
-        }
-    } catch (error) {
-        console.log(error.data);
+// Data Handlers
+async function loadAccountForEdit(accountId) {
+    showLoader();
+    openUpdateAccountModal();
+    const res = await fetch(`user/${accountId}`);
+    if (res.ok) {
+        const [account] = await res.json();
+        document.getElementById("id").value = account.account_id;
+        document.getElementById("number").value = account.account_number;
+        document.getElementById("plan").value = account.account_type;
+        document.getElementById("status").value = account.status;
+        document.getElementById("balance").value = account.balance;
+        document.getElementById("date").value = account.opened_date;
+        document.getElementById("customer").value = account.customer_id;
+        hideLoader();
     }
 }
 
-//Currently Working in this function when an account is already deleted
-function showDeleteModal(id, token) {
-    let data = null,
-        deleted = false;
+async function submitAddAccount() {
+    const payload = {
+        account_type: document.getElementById("acc-plans").value,
+        balance: +document.getElementById("initial-balance").value,
+        customer_id: +document.getElementById("customer-id").value,
+    };
+    const token = document.querySelector('input[name="_token"]').value;
+    showLoader();
+    const res = await fetch("user/store", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": token,
+            Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+    hideLoader();
+    if (res.ok) {
+        showSuccessAndReload("User has been added Successfully!");
+    } else {
+        const { message } = await res.json();
+        Swal.fire({ title: "Unsuccessful", text: message, icon: "error" });
+    }
+}
+
+async function submitUpdateAccount() {
+    const payload = {
+        id: +document.getElementById("id").value,
+        number: +document.getElementById("number").value,
+        balance: +document.getElementById("balance").value,
+        date: document.getElementById("date").value,
+        customer_id: +document.getElementById("customer").value,
+        plan: document.getElementById("plan").value,
+        status: document.getElementById("status").value,
+    };
+    const token = document.querySelector('input[name="_token"]').value;
+
+    const res = await fetch("user/update", {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": token,
+            Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+    if (res.ok) {
+        showSuccessAndReload("User updated!");
+        closeUpdateAccountModal();
+    }
+}
+
+async function confirmDeleteAccount(accountId) {
+    const token = document.querySelector('input[name="_token"]').value;
+    const res = await fetch(`user/${accountId}`);
+    if (res.ok) {
+        const [account] = await res.json();
+        if (account.status === "Inactive") {
+            return Swal.fire({
+                icon: "error",
+                title: "Already Inactive",
+                text: "User account is already Inactive",
+            });
+        }
+    }
+
     Swal.fire({
         title: "Wanna delete account?",
-        text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
         confirmButtonText: "Confirm",
-    }).then((result) => {
-        if (result.isConfirmed && !deleted) {
-            sendDeleteRequest(id, token);
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            await fetch("user/delete", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": token,
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({ id: accountId, status: "Inactive" }),
+            });
+            showSuccessAndReload("Deletion Successful!");
         }
     });
 }
 
-async function sendDeleteRequest(id, token) {
-    let existing = false;
-    const previousInfo = await fetch(`user/${id}`);
-    showLoader();
-
-    //Handles already deleted accounts
-    if (previousInfo.ok) {
-        const data = await previousInfo.json();
-        const status = data[0].status;
-
-        console.log(status);
-
-        if (status === "Inactive") {
-            existing = true;
-            Swal.fire({
-                icon: "error",
-                title: "Account already Inactive",
-                text: "Users account is already Inactive",
-            });
-            closeLoader();
-        }
-    }
-
-    if (!existing) {
-        const payload = {
-            id: id,
-            status: "Inactive",
-        };
-        const request = await fetch(`user/delete`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": token,
-                Accept: "application/json",
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (request.ok) {
-            closeLoader();
-            Swal.fire({
-                title: "Deletion Successfull!",
-                html: "<h1>Please wait shortly</h1>",
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector("b");
-                    timerInterval = setInterval(() => {
-                        timer.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100);
-                },
-                willClose: () => {
-                    clearInterval(timerInterval);
-                },
-            }).then((result) => {
-                /* Read more about handling dismissals below */
-                if (
-                    result.dismiss === Swal.DismissReason.timer ||
-                    result.dismiss === Swal.DismissReason.backdrop ||
-                    result.dismiss === Swal.DismissReason.cancel ||
-                    result.dismiss === Swal.DismissReason.close ||
-                    result.dismiss === Swal.DismissReason.esc
-                ) {
-                    accountsTable.ajax.reload();
-                }
-            });
-        } else {
-            if (!request.ok) {
-                const { message } = await request.json();
-                Swal.fire({
-                    title: "Unsuccessfull",
-                    text: message,
-                    icon: "error",
-                });
-            }
-        }
-    }
-}
-
-async function sendAddRequest() {
-    const balance = document.getElementById("initial-balance").value;
-    const customer = document.getElementById("customer-id").value;
-    const plan = document.getElementById("acc-plans").value;
-    const token = document.querySelector('input[name="_token"').value;
-
-    showLoader();
-
-    const payload = {
-        account_type: plan,
-        balance: balance,
-        customer_id: customer,
-    };
-
-    try {
-        const request = await fetch("user/store", {
-            method: "POST",
-            headers: {
-                "CONTENT-TYPE": "application/json",
-                "X-CSRF-TOKEN": token,
-                Accept: "application/json",
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (!request.ok) {
-            closeLoader();
-            const { message } = await request.json();
-            Swal.fire({
-                title: "Unsuccessfull",
-                text: message,
-                icon: "error",
-            });
-        }
-
-        if (request.ok) {
-            closeLoader();
-            Swal.fire({
-                title: "User has been added Successfully!",
-                html: "<h1>Please wait shortly</h1>",
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector("b");
-                    timerInterval = setInterval(() => {
-                        timer.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100);
-                },
-                willClose: () => {
-                    clearInterval(timerInterval);
-                },
-            }).then((result) => {
-                /* Read more about handling dismissals below */
-                if (
-                    result.dismiss === Swal.DismissReason.timer ||
-                    result.dismiss === Swal.DismissReason.backdrop ||
-                    result.dismiss === Swal.DismissReason.cancel ||
-                    result.dismiss === Swal.DismissReason.close ||
-                    result.dismiss === Swal.DismissReason.esc
-                ) {
-                    document.getElementById("initial-balance").value = "0";
-                    document.getElementById("customer-id").value = "";
-                    document.getElementById("acc-plans").value = "Savings";
-                    accountsTable.ajax.reload();
-                }
-            });
-        }
-    } catch (error) {
-        console.log("Error");
-    }
-}
-
-function showUpdateAccountModal() {
-    updateModal.classList.remove("invisible");
-}
-function showAddAccountModal() {
-    addNewModal.classList.remove("invisible");
-    addNewModal.classList.add("visible");
-}
-
-function closeUpdateAccountModal() {
-    updateModal.classList.add("invisible");
-}
-
-function closeAddAccountModal() {
-    addNewModal.classList.remove("invisible");
-}
-function showLoader() {
-    loader.classList.remove("invisible");
-}
-
-function closeLoader() {
-    loader.classList.add("invisible");
+function showSuccessAndReload(message) {
+    Swal.fire({
+        title: message,
+        html: "<h1>Please wait shortly</h1>",
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: () => Swal.showLoading(),
+        willClose: () => accountTable.ajax.reload(),
+    });
 }

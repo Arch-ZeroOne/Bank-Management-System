@@ -1,30 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\API\EmployeeRequest;
-use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 
-class EmployeesController extends Controller
+class EmployeesApiController extends Controller
 {
-
     public function index(){
-        return view("users.employees");
+        $data = DB::table('employees')
+            -> select()
+            -> get();
+        
+        //returning data as a resource
+        if($data){
+            return response() -> json($data);
+        }else{
+            return response() -> json(["message" => "No records available"],200);
+        }
     }
 
-
-    public function list(){ 
-
-        $query = DB::table("employees") -> get();
-
-        return DataTables::of($query) -> make(true);
-
-    }
-
-
-     public function store(EmployeeRequest $request){
+    public function store(EmployeeRequest $request){
         $form_infos = $request->validated();
         
         DB::table("employees")->insert([
@@ -35,7 +32,6 @@ class EmployeesController extends Controller
             "position" => $form_infos['position'],
             "hire_date" => $form_infos['hire_date'],
             "branch_id" => $form_infos['branch_id'],
-            "status" => "Active"
         ]);
     }
 
@@ -43,8 +39,8 @@ class EmployeesController extends Controller
         $query = DB::table('employees')
             ->where("employee_id", $id)
             -> get();
-  
-        return response() -> json($query);
+        
+        return response() -> json(["message" => "User Found", "data" => $query],200);
     }
 
     public function update(EmployeeRequest $request, String $id){
@@ -69,17 +65,11 @@ class EmployeesController extends Controller
         }
     }
 
-    public function delete(String $id){
-        {
-   
-        
-        DB::table('employees')->where("employee_id",
-                  $id) 
-                  -> update(['status' => "Inactive",
-        ]);
-        
-      }
-
+    public function destroy(String $id){
+        $query = DB::table('employees')
+            ->where("employee_id", $id)
+            -> delete();
+            
+        return response() -> json(["message" => "User has been deleted", "data" => $query],200);
     }
-
 }

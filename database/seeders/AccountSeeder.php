@@ -21,6 +21,7 @@ class AccountSeeder extends Seeder
         $random  = rand(0, 2);
         $random2 = rand(0, 1);
 
+
             DB::table('accounts')->insert([
                 'account_number' => $faker->randomNumber(9, true),
                 'account_type' => $accountTypes[$random],

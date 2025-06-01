@@ -58,9 +58,11 @@ use Illuminate\Support\Facades\Route;
 
     Route::controller(LoansController::class)->name('loans')->prefix('loans')->group(function () {
     Route::get('/', 'index');
-    Route::get("/list", 'list')->name('.list');
-    Route::patch("/update", 'update')->name(".update");
-    Route::get('/{id}','userInfo') -> name(".info");
+    Route::get("/list", 'list')->name('list');
+    Route::patch("/update", 'update')->name("update");
+    Route::post("/insert",'insert') -> name('insert');
+    Route::get('/{id}','userInfo') -> name("info");
+    Route::patch('/edit','edit') -> name("edit");
     });
 
     
@@ -68,6 +70,11 @@ use Illuminate\Support\Facades\Route;
     Route::controller(EmployeesController::class) -> name('employees') -> prefix('employees') -> group(function(){
       Route::get("/",'index');
       Route::get('/list','list') -> name('list');
+      Route::post("/store",'store') -> name("store");
+      Route::get('/{id}','show') -> name("show");
+      Route::patch("/{id}",'update') -> name("update");
+      Route::patch("/delete/{id}","delete") -> name('destroy');
+
     });
 
 
